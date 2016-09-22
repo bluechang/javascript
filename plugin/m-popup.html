@@ -61,6 +61,7 @@
 					setTimeout(function(){
 						t.hide();
 					}, 1000);
+					
 					return false;
 				}
 			});
@@ -72,6 +73,7 @@
 			// pop2
 			$('.popup2').popup({
 				btnTrigger: '.trigger2',
+				btnClose: '.popup-btn-close',
 				speed: 300,
 				onBeforeShow: function(){
 					alert('不继续向下执行');
@@ -82,6 +84,7 @@
 			// pop3
 			$('.popup3').popup({
 				btnTrigger: '.trigger3',
+				btnClose: '.popup-btn-close',
 				speed: 300
 			});
 		})
