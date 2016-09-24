@@ -55,7 +55,7 @@ gulp.task('img', ()=>{
 	gulp.watch(files.img, browserSync.reload);
 });
 
-gulp.task('build', ['server', 'html', 'less', 'js', 'img']);
+gulp.task('build', ['server', 'html', 'css', 'js', 'img']);
 
 gulp.task('default', ['build']);
 

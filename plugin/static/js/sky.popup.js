@@ -33,13 +33,13 @@
 
 		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
 
-		t.$parent = $(elem);
+		t.$container = $(elem);
 
 		t.$btnTrigger = getJq('btnTrigger', t.opts);
 
 		// 关闭按钮是否是当前容器的子元素
-		t.$btnClose  = t.$parent.find(t.opts.btnClose).length !== 0 ? 
-							t.$parent.find(t.opts.btnClose) : 
+		t.$btnClose  = t.$container.find(t.opts.btnClose).length !== 0 ? 
+							t.$container.find(t.opts.btnClose) : 
 							getJq('btnClose', t.opts);
 
 		t.$mask = $(Popup.mask);
@@ -125,16 +125,16 @@
 	Popup.prototype.centred = function(){
 		var t = this;
 
-		t.$parent.css('position', 'fixed');
+		t.$container.css('position', 'fixed');
 
-		var w = t.$parent.outerWidth(),
-			h = t.$parent.outerHeight(),
+		var w = t.$container.outerWidth(),
+			h = t.$container.outerHeight(),
 			W = $(window).width(),
 			H = $(window).height(),
 			left = (W - w)/2,
 			top = (H - h)/2;
 
-		t.$parent.css({
+		t.$container.css({
 			left: left,
 			top: top,
 			zIndex: Popup.zIndex
@@ -222,7 +222,7 @@
 			t.centred();
 		}).trigger('resize');
 
-		t.$parent.fadeIn(t.opts.speed);
+		t.$container.fadeIn(t.opts.speed);
 		t.$mask.fadeIn(t.opts.speed)
 	};
 
@@ -233,7 +233,7 @@
 		// 移除resize事件
 		$(window).off('.popup');
 
-		t.$parent.fadeOut(t.opts.speed);
+		t.$container.fadeOut(t.opts.speed);
 		t.$mask.fadeOut(t.opts.speed);
 	};
 
@@ -272,7 +272,7 @@
 	// 挂载到jQuery原型上
 	$.fn.skyPopup = function(options){ 
 		// 只实例化第一个并返回
-		if(this.length <= 0){
+		if(this.length === 0){
 			throw new Error('The elem is not exist!!!');
 		}
 

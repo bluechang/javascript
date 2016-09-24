@@ -31,7 +31,7 @@
 	function Popup(elem, options){  
 		var t = this;
 
-		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
+		t.opts = $.extend(true, {}, Popup.defaults, options || {});
 
 		t.$parent = $(elem);
 
@@ -236,7 +236,7 @@
 	Popup.zIndex = 99999;
 
 	// 默认参数
-	Popup.defaultOpts = {
+	Popup.defaults = {
 		// 打开按钮
 		btnTrigger: null,
 		// 关闭按钮
