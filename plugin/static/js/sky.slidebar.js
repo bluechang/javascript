@@ -11,15 +11,35 @@
 
 ;(function(window, $){
 
+	// 获取jQuery对象
+	var getJq = function(selector, context){
+		var jq = null;
+		context = context || window.document;
+
+		if(context === window.document){
+			jq = $(selector);
+			if(jq.length === 0){
+				throw new Error('$("' + selector + '") is not exist!!!');
+			}
+		}else{
+			jq = $(selector, context);
+			if(jq.length === 0){
+				getJq(selector, window.document);
+			}
+		}
+
+		return jq;
+	};
+
 	//构造器
 	function Slidebar(elem, options){
 		var t = this;
 
-		t.opts = $.extend({}, Slidebar.defaultOpts, options || {});
+		t.opts = $.extend(true, {}, Slidebar.defaultOpts, options || {});
 		t.$container = $(elem);
 
 		//开关
-		t.$switch = $( t.opts.switch );
+		t.$switch = getJq( t.opts.switch, t.$container );
 		//父容器宽度,即展开和收起的宽度
 		t.containerWidth = t.opts.hasPadding ? t.$container.outerWidth() : t.$container.width(); 
 		//是否显示内容	

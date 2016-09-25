@@ -19,11 +19,22 @@
 	}
 
 	// 获取jQuery对象
-	var getJq = function(name, options){
-		var jq = $(options[name]);
-		if(jq.length === 0){
-			throw new Error('The' + name + ' is not exist！！！');
+	var getJq = function(selector, context){
+		var jq = null;
+		context = context || window.document;
+
+		if(context === window.document){
+			jq = $(selector);
+			if(jq.length === 0){
+				throw new Error('$("' + selector + '") is not exist!!!');
+			}
+		}else{
+			jq = $(selector, context);
+			if(jq.length === 0){
+				getJq(selector, window.document);
+			}
 		}
+
 		return jq;
 	};
 
@@ -33,14 +44,12 @@
 
 		t.opts = $.extend(true, {}, Popup.defaults, options || {});
 
-		t.$parent = $(elem);
+		t.$container = $(elem);
 
-		t.$btnTrigger = getJq('btnTrigger', t.opts);
+		t.$btnTrigger = getJq(t.opts.btnTrigger);
 
 		// 关闭按钮是否是当前容器的子元素
-		t.$btnClose  = t.$parent.find(t.opts.btnClose).length !== 0 ? 
-							t.$parent.find(t.opts.btnClose) : 
-							getJq('btnClose', t.opts);
+		t.$btnClose  = getJq(t.opts.btnClose, t.$container);
 
 		t.$mask = $(Popup.mask);
 
@@ -125,7 +134,7 @@
 	Popup.prototype.centred = function(){
 		var t = this;
 
-		t.$parent.css({
+		t.$container.css({
 			position: 'fixed',
 			left: '50%',
 			top: '50%',
@@ -211,7 +220,7 @@
 		}
 
 		t.centred();
-		t.$parent.fadeIn(t.opts.speed);
+		t.$container.fadeIn(t.opts.speed);
 		t.$mask.fadeIn(t.opts.speed)
 	};
 
@@ -219,7 +228,7 @@
 	Popup.prototype.hide = function(){
 		var t = this;
 
-		t.$parent.fadeOut(t.opts.speed);
+		t.$container.fadeOut(t.opts.speed);
 		t.$mask.fadeOut(t.opts.speed);
 	};
 

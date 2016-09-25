@@ -19,11 +19,22 @@
 	}
 
 	// 获取jQuery对象
-	var getJq = function(name, options){
-		var jq = $(options[name]);
-		if(jq.length === 0){
-			throw new Error('The' + name + ' is not exist！！！');
+	var getJq = function(selector, context){
+		var jq = null;
+		context = context || window.document;
+
+		if(context === window.document){
+			jq = $(selector);
+			if(jq.length === 0){
+				throw new Error('$("' + selector + '") is not exist!!!');
+			}
+		}else{
+			jq = $(selector, context);
+			if(jq.length === 0){
+				getJq(selector, window.document);
+			}
 		}
+
 		return jq;
 	};
 
@@ -34,13 +45,8 @@
 		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
 
 		t.$container = $(elem);
-
-		t.$btnTrigger = getJq('btnTrigger', t.opts);
-
-		// 关闭按钮是否是当前容器的子元素
-		t.$btnClose  = t.$container.find(t.opts.btnClose).length !== 0 ? 
-							t.$container.find(t.opts.btnClose) : 
-							getJq('btnClose', t.opts);
+		t.$btnTrigger = getJq(t.opts.btnTrigger);
+		t.$btnClose  = getJq(t.opts.btnClose, t.$container);
 
 		t.$mask = $(Popup.mask);
 

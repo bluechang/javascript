@@ -15,7 +15,7 @@
 	function Marquee(elem, options){  
 		var t = this;
 
-		t.opts = $.extend({}, Marquee.defaultOpts, options || {}); 
+		t.opts = $.extend(true, {}, Marquee.defaultOpts, options || {}); 
 
 		// 各容器
 		t.$container = $(elem);
