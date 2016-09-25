@@ -9,7 +9,7 @@
  */
 
 
-;(function($, window){
+;(function(window, $){
 
 	//构造器
 	function Slidebar(elem, options){
@@ -136,7 +136,7 @@
 		return new Slidebar(this[0], options);
 	}
 
-})(jQuery, window);
+})(window, jQuery);
 
 
 

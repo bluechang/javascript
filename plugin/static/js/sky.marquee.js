@@ -1,6 +1,6 @@
 /**
  *
- * popup:
+ * marquee:
  * 
  * 
  * @author: blue chang
@@ -24,7 +24,6 @@
 		t.$slides = t.$wrap.children();
 
 		t.initialize();
-		t.initEvents();
 	}
 
 	// 初始化
@@ -40,10 +39,10 @@
 		}
 		if(t.cssProp === 'left' || t.cssProp === 'right'){
 			t.slideSize = getSlideSize(t.$container.width());  
-			t.slideSizeCss = 'width';
+			t.slideCss = 'width';
 		}else{
 			t.slideSize = getSlideSize(t.$container.height());
-			t.slideSizeCss = 'height';
+			t.slideCss = 'height';
 		}
 
 		// 最大距离
@@ -64,6 +63,7 @@
 		}
 
 		t.initStyle();
+		t.initEvents();
 	}
 
 	Marquee.prototype.initStyle = function(){
@@ -75,7 +75,7 @@
 				position: 'absolute',
 					overflow: 'hidden'
 			});
-			$(this).css(t.slideSizeCss, t.slideSize);
+			$(this).css(t.slideCss, t.slideSize);
 			$(this).css(t.cssProp, i*( t.slideSize + t.opts.spaceBetween));
 		});
 
