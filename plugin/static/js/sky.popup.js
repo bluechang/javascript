@@ -72,7 +72,7 @@
 			t.target = this;
 
 			// 显示前
-			if(t.excuteStack(t.stackBeforeShow, this) === false){
+			if(t.excuteStack(t.stackBeforeShow, t.target) === false){
 				return;
 			}
 
@@ -80,7 +80,7 @@
 			t.show();
 
 			// 显示后
-			t.excuteStack(t.stackAfterShow, this);
+			t.excuteStack(t.stackAfterShow, t.target);
 		});
 
 		// 关闭按钮
