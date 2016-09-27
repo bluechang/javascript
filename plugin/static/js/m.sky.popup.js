@@ -12,6 +12,7 @@
 
 
 ;(function(window, $){
+	'use strict';
 	
 	// 是否是函数
 	var isFunction = function(obj){

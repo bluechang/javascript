@@ -12,6 +12,10 @@
 
 
 ;(function(window, $){
+	'use strict';
+
+	// 转数组
+	var slice = Array.prototype.slice;
 	
 	// 是否是函数
 	var isFunction = function(obj){
@@ -64,8 +68,11 @@
 
 		// 显示按钮
 		t.$btnTrigger.on('click', function(){
+
+			t.target = this;
+
 			// 显示前
-			if(t.excuteStack(t.stackBeforeShow) === false){
+			if(t.excuteStack(t.stackBeforeShow, this) === false){
 				return;
 			}
 
@@ -73,13 +80,13 @@
 			t.show();
 
 			// 显示后
-			t.excuteStack(t.stackAfterShow);
+			t.excuteStack(t.stackAfterShow, this);
 		});
 
 		// 关闭按钮
 		t.$btnClose.on('click', function(){
 			// 隐藏前
-			if(t.excuteStack(t.stackBeforeHide) === false){
+			if(t.excuteStack(t.stackBeforeHide, t.target) === false){
 				return;
 			}
 			
@@ -87,7 +94,7 @@
 			t.hide();
 
 			// 隐藏后
-			t.excuteStack(t.stackAfterHide);
+			t.excuteStack(t.stackAfterHide, t.target);
 		});
 	};
 
@@ -115,7 +122,7 @@
 			var r = Popup.refer;
 
 			// 隐藏前
-			if(r.excuteStack(r.stackBeforeHide) === false){
+			if(r.excuteStack(r.stackBeforeHide, r.target) === false){
 				return;
 			}
 
@@ -123,7 +130,7 @@
 			r.hide();
 
 			// 隐藏后
-			r.excuteStack(r.stackAfterHide);
+			r.excuteStack(r.stackAfterHide, r.target);
 		});
 	};
 
@@ -151,8 +158,10 @@
 	Popup.prototype.excuteStack = function(stack){
 		var t = this;
 		
+		// 将需要的参数,传递到栈中
+		var rest = slice.call(arguments).slice(1);
 		for (var i = 0; i < stack.length; i++) {
-			var value = stack[i].call(t);
+			var value = stack[i].apply(t, rest);
 
 			//返回false时，阻断向下执行
 			if(value === false){

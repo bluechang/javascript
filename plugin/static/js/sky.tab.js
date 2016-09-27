@@ -1,6 +1,6 @@
 /**
  *
- * marquee:
+ * tab:
  * 
  * 
  * @author: blue chang
@@ -9,7 +9,8 @@
  */
 
 ;(function(window, $){
-
+	'use strict';
+	
 	// 获取jQuery对象
 	var getJq = function(selector, context){
 		var jq = null;

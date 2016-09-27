@@ -9,7 +9,7 @@
  */
 
 ;(function(window, $){
-	
+	'use strict';
 
 	// 构造器
 	function Marquee(elem, options){  

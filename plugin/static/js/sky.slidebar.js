@@ -10,7 +10,8 @@
 
 
 ;(function(window, $){
-
+	'use strict';
+	
 	// 获取jQuery对象
 	var getJq = function(selector, context){
 		var jq = null;
@@ -83,7 +84,8 @@
 
 		var offsetLeft = t.$container.offset().left;
 
-		if( offsetLeft >= t.containerWidth ) 		//判断左偏移是否大于父容器宽度
+		//判断左偏移是否大于父容器宽度
+		if( offsetLeft >= t.containerWidth ) 		
 			return 'right';
 		else
 			return 'left';
@@ -142,12 +144,12 @@
 		switchOn: 'switch-off', 	//开关打开时状态
 		switchOff: 'switch-on', 	//开关关闭时状态
 		hasPadding: true, 			//切换时, 移动的距离是否包含内边距和边框
-		isShow: false,				//是否显示
+		isShow: true,				//是否显示
 		speed: 300					//动画时长
 	}
 
 	//挂载到jquery对象
-	$.fn.slidebar = function(options){
+	$.fn.skySlidebar = function(options){
 		if(this.length === 0){
 			throw new Error('The elem is not exist!!!');
 		}
