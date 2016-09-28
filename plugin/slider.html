@@ -17,7 +17,14 @@
 			width: 100%;
 			height: 100%;
 		}
-
+		
+		.slider-slide{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
 		.slider-slide img{
 			width: 100%;
 		}
@@ -30,6 +37,7 @@
 			cursor: pointer;
 			position: absolute;
 			top: 50%;
+			z-index: 10;
 		}
 		.slider-btn-prev{
 			left: 0;
@@ -38,14 +46,15 @@
 			right: 0;
 		}
 
-		.slider-pagination{
+		.slider-indicator{
 			text-align: center;
 			position: absolute;
 			left: 0;
 			right: 0;
 			bottom: 10px;
+			z-index: 10;
 		}
-		.slider-pagination .slider-bullet{
+		.slider-indicator .slider-dot{
 			display: inline-block;
 			width: 12px;
 			height: 12px;
@@ -54,8 +63,11 @@
 			border-radius: 50%;
 			cursor: pointer;
 		}
-		.slider-pagination .slider-bullet:first-child{
+		.slider-indicator .slider-dot:first-child{
 			margin-left: 0;
+		}
+		.slider-indicator .slider-dot.on{
+			background-color: steelblue;
 		}
 	</style>
 </head>
@@ -68,7 +80,7 @@
 			<div class="slider-slide"><img src="static/images/03.jpg"></div>
 			<div class="slider-slide"><img src="static/images/04.jpg"></div>
 		</div>
-		<div class="slider-pagination"></div>
+		<div class="slider-indicator"></div>
 		<div class="slider-btn slider-btn-prev"></div>
 		<div class="slider-btn slider-btn-next"></div>
 	</div>
@@ -78,11 +90,12 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.slider-container').skySlider({
-				effect: 'slide',
-				pagination: '.slider-pagination',
+				effect: 'scroll',
+				indicator: '.slider-indicator',
 				btnPrev: '.slider-btn-prev',
 				btnNext: '.slider-btn-next',
-				speed: 600
+				autoDelay: 2000,
+				speed: 500
 			})
 		})
 	</script>
