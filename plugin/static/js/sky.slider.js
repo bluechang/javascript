@@ -72,14 +72,14 @@
 
 			t.$wrapper.css({
 				width: t.slideWidth * t.length,
-					postion: 'absolute',
-						left: 0
+				postion: 'absolute',
+				left: 0
 			});
 			t.$slides.each(function(i){
 				$(this).css({
 					width: t.slideWidth,
-						position: 'absolute',
-							left: i * t.slideWidth
+					position: 'absolute',
+					left: i * t.slideWidth
 				})
 			});
 
