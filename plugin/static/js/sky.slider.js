@@ -42,7 +42,7 @@
 		t.$btnPrev = t.$container.find(t.opts.btnPrev);
 		t.$btnNext = t.$container.find(t.opts.btnNext);
 		t.$indicator = t.$container.find(t.opts.indicator);
-		
+
 		t.$slides = t.$wrapper.children(t.opts.slide);
 
 		t.initialize();
@@ -65,6 +65,11 @@
 		t.$wrapper.css('position', 'relative');
 		t.$slides.css({display: 'none', position: 'absolute'});
 		t.$slides.eq(t.index).css('display', 'block');
+
+		if(t.opts.autoArrowVisible){
+			t.$btnPrev.hide();
+			t.$btnNext.hide();
+		}
 
 		t.initIndicator();
 
@@ -103,8 +108,16 @@
 		});
 
 		t.$container.hover(function(){
+			if(t.opts.autoArrowVisible){
+				t.$btnPrev.stop(true).fadeIn();
+				t.$btnNext.stop(true).fadeIn();
+			}
 			t.stop();
 		},function(){
+			if(t.opts.autoArrowVisible){
+				t.$btnPrev.stop(true).fadeOut();
+				t.$btnNext.stop(true).fadeOut();
+			}
 			t.play();
 		});
 
@@ -125,7 +138,7 @@
 
 	// slide
 	Slider.prototype.changeByScroll = function(index){ 
-		var t = this;   console.log(index, t.index);
+		var t = this;   
 
 		var scrollWidth = (index > t.index) ? t.slideWidth : -t.slideWidth;  
 		var itemNew = t.$slides.eq(index); 		
@@ -207,7 +220,7 @@
 		indicatorChildTag: 'a',
 		dot: '.slider-dot',
 		active: 'on',
-		isArrowVisible: true,
+		autoArrowVisible: true,
 		defaultIndex: 0,
 		autoDelay: 2500,
 		speed: 500
