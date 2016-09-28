@@ -27,7 +27,7 @@
 	BackToTop.prototype.initialize = function(){
 		var t = this;
 
-		t.max = $win.height() / 3;		
+		t.max = t.opts.max || $win.height() / 3;		
 
 		if(!t.opts.isAuto){  
 			t.$btn.show();
@@ -99,6 +99,7 @@
 		eventType: 'click',
 		isAuto: true,			//是否自动显隐
 		speed: 4,				//移动速度,越大速度越慢
+		max: null,				//显隐临界点
 		timerSpeed: 30			//定时器执行速度
 	};
 	
