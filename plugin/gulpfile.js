@@ -1,16 +1,15 @@
 
-const gulp 				= require('gulp');
-const autoprefixer 		= require('gulp-autoprefixer');
-const less 				= require('gulp-less');
-const uglify 			= require('gulp-uglify');
-const browserSync 		= require('browser-sync').create();
-
+const gulp 			= 	require('gulp');
+const autoprefixer  = 	require('gulp-autoprefixer');
+const uglify 		= 	require('gulp-uglify');
+const less 			= 	require('gulp-less');
+const browserSync   =	require('browser-sync').create();
 
 const files = {
 	html: 		['./*.html'],
 	css:  		['./static/css/**'],
 	less:  		['./static/less/**'],
-	lessMain: 	['./static/less/main.less'],
+	lessMain: 	['./static/less/style.less'],
 	lessTarget: ['./static/css/'],
 	js: 		['./static/js/**'],
 	img: 		['./static/images/**']
@@ -24,7 +23,7 @@ gulp.task('server', ()=>{
 		server: {
 			baseDir: './'
 		}
-	});
+	})
 });
 
 gulp.task('html', ()=>{
@@ -55,24 +54,11 @@ gulp.task('img', ()=>{
 	gulp.watch(files.img, browserSync.reload);
 });
 
-gulp.task('build', ['server', 'html', 'css', 'js', 'img']);
+
+gulp.task('build', ['server', 'html', 'less', 'js', 'img']);
+
 
 gulp.task('default', ['build']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

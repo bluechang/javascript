@@ -1,29 +1,29 @@
 {
-  "name": "plugin",
+  "name": "test",
   "version": "1.0.0",
-  "description": "",
-  "main": "gulpfile.js",
-  "dependencies": {
-    "gulp": "^3.9.1"
-  },
-  "devDependencies": {
-    "browser-sync": "^2.16.0",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-less": "^3.1.0",
-    "gulp-uglify": "^2.0.0"
-  },
+  "description": "test",
+  "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bluechang/javascript.git"
+    "url": "git+https://github.com/bluechang/test.git"
   },
-  "author": "blue chang",
+  "keywords": [
+    "test"
+  ],
+  "author": "BlueChang",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bluechang/javascript/issues"
+    "url": "https://github.com/bluechang/test/issues"
   },
-  "homepage": "https://github.com/bluechang/javascript#readme"
+  "homepage": "https://github.com/bluechang/test#readme",
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-less": "^3.1.0",
+    "gulp-uglify": "^2.0.0"
+  }
 }
