@@ -52,7 +52,7 @@
 		var t = this;
 
 		t.index = t.opts.defaultIndex;
-		t.count = t.$slides.length;
+		t.count = t.$slides.length;           	
 		t.slideWidth = t.$container.width();
 		t.slideHeight = t.$container.height();
 
@@ -70,22 +70,21 @@
 			t.$btnPrev.hide();
 			t.$btnNext.hide();
 		}
-
 		t.initIndicator();
 
 		t.ininEvents();
 	}
 
-	Slider.prototype.initIndicator = function(){
+	Slider.prototype.initIndicator = function(){  
 		var t = this;
 
 		var indicatorHTML = '',	
-			dotClass = t.opts.dot.substr(1);
+			dotClass = t.opts.dot.substr(1);		
 		for(var i = 0; i < t.count; i++){
 			indicatorHTML += '<' + t.opts.indicatorChildTag + ' class="' + dotClass + '"></' + t.opts.indicatorChildTag + '>'
 		}
-		t.$indicator.html(indicatorHTML); 
-		t.$dots = t.$indicator.children();  
+		t.$indicator.html(indicatorHTML); 		
+		t.$dots = t.$indicator.children();  		
 
 		t.$dots.removeClass(t.opts.active)
 			.eq(t.index).addClass(t.opts.active);
@@ -125,7 +124,7 @@
 	}
 
 	// fade
-	Slider.prototype.changeByFade = function(index){
+	Slider.prototype.changeByFade = function(index){   
 		var t = this;
 
 		t.$slides.fadeOut(t.opts.speed)
@@ -147,7 +146,7 @@
 		t.isAnimate = true;
 
 		// 动画结束回调
-		function doFinash() {  
+		function doFinish() {  
 			itemOld.css('display', 'none');
 			t.isAnimate = false;
 		}
@@ -156,7 +155,7 @@
 		itemOld.animate({left: -scrollWidth}, t.opts.speed);
 		// 移入新的元素
 		itemNew.css({ display: 'block', left: scrollWidth})
-				.animate({left: 0}, t.opts.speed, doFinash);
+				.animate({left: 0}, t.opts.speed, doFinish);
 	}
 
 	Slider.prototype.play = function(){
@@ -196,10 +195,12 @@
 		t.changeTo(index);
 	}
 
+	// 核心逻辑
 	Slider.prototype.changeTo = function(index){
 		var t = this;
 
-		if(t.index === index || t.isAnimate) { return; }
+		// 跳转到当前或动画未结束，直接返回
+		if(t.index === index || t.isAnimate) return;
 
 		t.effectFn.call(t, index);
 		t.index = index;
@@ -210,20 +211,24 @@
 
 	// 默认参数
 	Slider.defaultOpts = {
-		effect: 'fade',								//fade、slide
-		eventType: 'mouseover',
+		effect: 'fade',								//效果  fade|scroll
+
 		wrapper: '.slider-wrapper',					//slide容器
 		slide: '.slider-slide',						//slide
-		btnPrev: '.slider-btn-prev',				
-		btnNext: '.slider-btn-next',
-		indicator: '.slider-indicator',
-		indicatorChildTag: 'a',
-		dot: '.slider-dot',
-		active: 'on',
-		autoArrowVisible: true,
-		defaultIndex: 0,
-		autoDelay: 2500,
-		speed: 500
+
+		btnPrev: '.slider-btn-prev',				//上一个按钮	
+		btnNext: '.slider-btn-next',				//下一个按钮
+
+		eventType: 'mouseover',						//指示器效果
+		indicator: '.slider-indicator',				//指示器容器
+		indicatorChildTag: 'a',						//指示器容器子标签
+		dot: '.slider-dot',							//指示器子元素类名
+		active: 'on',								//指示器当前类名
+
+		autoArrowVisible: true,						//按钮是否自动显示
+		defaultIndex: 0,							//默认下标
+		autoDelay: 2500,							//切换时间
+		speed: 500									//变化速度
 	};
 	
 
