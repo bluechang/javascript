@@ -53,14 +53,22 @@
 
 		t.index = t.opts.defaultIndex;
 		t.count = t.$slides.length;           	
-		t.slideWidth = t.$container.width();
-		t.slideHeight = t.$container.height();
+		t.containerWidth = t.$container.width();
+		t.containerHeight = t.$container.height();
 
 		//是否正在执行动画
 		t.isAnimate = false;						
 
 		var upperName = t.opts.effect.charAt(0).toUpperCase() + t.opts.effect.substr(1);
 		t.effectFn = t['changeBy' + upperName];
+
+		t.updateLayout();
+		t.ininEvents();
+	}
+
+	// 更新布局
+	Slider.prototype.updateLayout = function(){
+		var t = this;
 
 		t.$wrapper.css('position', 'relative');
 		t.$slides.css({display: 'none', position: 'absolute'});
@@ -76,13 +84,6 @@
 		if(t.$indicator.length){
 			t.initIndicator();
 		}
-
-		// 初始化播放
-		if(t.opts.autoPlay){
-			t.play();
-		}
-
-		t.ininEvents();
 	}
 
 	Slider.prototype.initIndicator = function(){  
@@ -135,6 +136,11 @@
 				t.play();
 			}
 		});
+
+		// 初始化播放
+		if(t.opts.autoPlay){
+			t.play();
+		}
 	}
 
 	// fade
@@ -153,7 +159,7 @@
 	Slider.prototype.changeByScroll = function(index){ 
 		var t = this;   
 
-		var scrollWidth = (index > t.index) ? t.slideWidth : -t.slideWidth;  
+		var scrollWidth = (index > t.index) ? t.containerWidth : -t.containerWidth;  
 		var itemNew = t.$slides.eq(index); 		
 		var itemOld = t.$slides.eq(t.index);  	
 
@@ -229,6 +235,8 @@
 	Slider.defaultOpts = {
 		effect: 'fade',								//效果  fade|scroll
 		defaultIndex: 0,							//默认下标
+
+		slidesPerView: 1,							//每屏显示个数
 
 		wrapper: '.slider-wrapper',					//slide容器
 		slide: '.slider-slide',						//slide
