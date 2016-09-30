@@ -27,6 +27,7 @@
 	BackToTop.prototype.initialize = function(){
 		var t = this;
 
+		t.isAnimate = false;
 		t.max = t.opts.max || $win.height() / 3;		
 
 		if(!t.opts.isAuto){  
@@ -55,6 +56,11 @@
 	BackToTop.prototype.play = function(){
 		var t = this;
 
+		// 运动期间 滚轮事件 失效
+		$win.on('wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop', function(e){   
+			e.preventDefault();
+		});
+
 		t.timer = setInterval(function(){
 			t.tick();
 		}, t.opts.timerSpeed);
@@ -74,7 +80,8 @@
 		var scrollTop = $win.scrollTop();
 		var speed = scrollTop / t.opts.speed;
 
-		if(scrollTop === 0){
+		if(scrollTop === 0){  
+			$win.off('.BackToTop');
 			t.stop();
 		}else{
 			$win.scrollTop(scrollTop - speed);
@@ -100,7 +107,7 @@
 		isAuto: true,			//是否自动显隐
 		speed: 4,				//移动速度,越大速度越慢
 		max: null,				//显隐临界点
-		timerSpeed: 30			//定时器执行速度
+		timerSpeed: 50			//定时器执行速度
 	};
 	
 
