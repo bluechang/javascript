@@ -66,3 +66,30 @@ swfobject.flash = function(url, containerID, width, height, vars) {
 	}
 	swfobject.embedSWF(url, containerID, width, height, version, 'http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?' + Math.random(), flashvars, params, attributes);
 };
+
+
+/**
+ *
+ * 参考：http://www.cnblogs.com/shimily/articles/4950530.html
+ * flvplayer播放器配置参数
+ *
+ * vcastr_file: 	url, 多个使用|分开
+ * vcastr_title: 	标题, 多个使用|分开
+ * IsAutoPlay: 		自动播放：0不自动，1自动。 默认: 0
+ * IsContinue: 		影片连续播放：0表示不连续，1表示连续循环。默认：0
+ * DefaultVolume: 	默认音量 ：0-100 的数值。 默认：100
+ * BarPosition: 	控制栏位置 ：0表示在影片上浮动显示，1表示在影片下方显示。 默认：0
+ * IsShowBar：		控制栏 ：0不显示，1一直显示，2鼠标悬停时显示，3开始不显示，鼠标悬停后显示。 默认：2
+ * BarColor： 		播放控制栏颜色，颜色都以0x开始16进制数字表示
+ * BarTransparent： 播放控制栏透明度
+ * GlowColor：    	按键图标颜色，颜色都以0x开始16进制数字表示
+ * IconColor：		鼠标悬停时光晕颜色，颜色都以0x开始16进制数字表示
+ * TextColor：		播放器文字颜色，颜色都以0x开始16进制数字表示
+ * LogoText：		添加自己网站名称等信息(英文)
+ * LogoUrl：		从外部读取logo图片,注意自己调整logo大小,支持图片格式和swf格式
+ * BeginSwf：		影片开始播放之前,从外部读取swf文件，可以添加广告，或者网站信息，需自己制作
+ * EndSwf：			影片播放结束后,从外部读取swf文件，可以添加相关影片信息，影片分享等信息，需自己制作
+ * IsShowTime：		是否显示时间 : 0不显示，1显示。 默认：1
+ * BufferTime：		影片缓冲时间，单位（秒）
+ * 
+ */
