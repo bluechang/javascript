@@ -11,6 +11,11 @@
 			margin: 50px auto 0;
 			overflow: hidden;
 			position: relative;
+			/*阻止双击产生蓝色遮罩*/
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
 		}
 
 		.slider-wrapper{
@@ -104,6 +109,7 @@
 				dot: '.slider-dot',						//指示器子元素类名
 				active: 'on',							//指示器当前类名
 
+				autoPlay: true,							//是否自动播放
 				autoArrowVisible: false,				//按钮是否自动显示
 				autoDelay: 2000,						//切换时间
 				speed: 500								//变化速度
