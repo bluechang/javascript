@@ -49,7 +49,7 @@
 		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
 
 		t.$container = $(elem);
-		t.$btnTrigger = getJq(t.opts.btnTrigger);
+		t.$btnTrigger = $(t.opts.btnTrigger);
 		t.$btnClose  = getJq(t.opts.btnClose, t.$container);
 
 		t.$mask = $(Popup.mask);
@@ -66,22 +66,24 @@
 	Popup.prototype.initEvents = function(){ 
 		var t = this;
 
-		// 显示按钮
-		t.$btnTrigger.on('click', function(){
+		if(t.$btnTrigger.length){
+			// 显示按钮
+			t.$btnTrigger.on('click', function(){
 
-			t.target = this;
+				t.target = this;
 
-			// 显示前
-			if(t.excuteStack(t.stackBeforeShow, t.target) === false){
-				return;
-			}
+				// 显示前
+				if(t.excuteStack(t.stackBeforeShow, t.target) === false){
+					return;
+				}
 
-			// 显示
-			t.show();
+				// 显示
+				t.show();
 
-			// 显示后
-			t.excuteStack(t.stackAfterShow, t.target);
-		});
+				// 显示后
+				t.excuteStack(t.stackAfterShow, t.target);
+			});
+		}
 
 		// 关闭按钮
 		t.$btnClose.on('click', function(){

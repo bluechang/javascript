@@ -5,6 +5,11 @@
 	<title>popup</title>
 	<link rel="stylesheet" href="static/css/reset.css">
 	<style type="text/css">
+		body{
+			padding-top: 50px;
+			text-align: center;
+		}
+
 		.popup{
 			display: none;
 			width: 500px;
@@ -27,8 +32,9 @@
 	<button class="trigger1">点击1</button>
 	<button class="trigger2">点击2</button>
 	<button class="trigger3">点击3</button>
-	<button class="trigger4" data-index="1">点击4</button>
-	<button class="trigger4" data-index="2">点击4</button>
+	<button class="trigger4">点击4</button>
+	<button class="trigger5" data-index="1">点击5</button>
+	<button class="trigger5" data-index="2">点击5</button>
 
 	<div class="popup popup1" id="popup1">
 		<a href="javascript:;" class="popup-btn-close"></a>
@@ -43,6 +49,10 @@
 		<div class="main">main3</div>
 	</div>
 	<div class="popup popup4" id="popup4">
+		<a href="javascript:;" class="popup-btn-close"></a>
+		<div class="main">main4</div>
+	</div>
+	<div class="popup popup5" id="popup5">
 		<a href="javascript:;" class="popup-btn-close"></a>
 		<div class="main">main4</div>
 	</div>
@@ -93,15 +103,24 @@
 				speed: 300
 			});
 
-			// pop4
-			$('.popup4').skyPopup({
-				btnTrigger: '.trigger4',
+			// pop4 无触发按钮
+			$('.trigger4').on('click', function(){
+				var pop = $('.popup4').skyPopup({
+					btnClose: '.popup-btn-close',
+					speed: 300
+				});
+				pop.show();
+			})
+
+			// pop5
+			$('.popup5').skyPopup({
+				btnTrigger: '.trigger5',
 				btnClose: '.popup-btn-close',
 				speed: 300,
 				onAfterShow: function(triggerElem){
 					// 可用于携带数据的一组btnTrigger
 					var index = $(triggerElem).attr('data-index');
-					alert(index);
+					console.log('data-index: ' + index);
 				}
 			});
 		})
