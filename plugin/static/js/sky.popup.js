@@ -276,15 +276,7 @@
 		mask:{
 			opacity: 0.7,
 			backgroundColor: '#000'
-		},
-		// 显示前
-		onBeforeShow: [],
-		// 显示后
-		onAfterShow: [],
-		// 隐藏前
-		onBeforeHide: [],
-		// 隐藏后
-		onAfterHide: []
+		}
 	};
 	
 
