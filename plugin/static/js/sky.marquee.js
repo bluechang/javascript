@@ -116,7 +116,7 @@
 		window.clearInterval(t.timer);
 	}
 
-	// 执行
+	// 执行 核心算法
 	Marquee.prototype.tick = function(){ 
 		var t = this;					
 

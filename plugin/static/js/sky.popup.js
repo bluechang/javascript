@@ -99,7 +99,7 @@
 		});
 	};
 
-	// 添加遮罩
+	// 添加遮罩   只添加一次  需初始化好事件
 	Popup.prototype.appendMask = function(){
 		var t = this;
 
@@ -236,7 +236,7 @@
 		// 添加resize事件并执行
 		$(window).on('resize.Popup', function(){
 			t.centred();
-		}).trigger('resize');
+		}).trigger('resize.Popup');
 
 		t.$container.fadeIn(t.opts.speed);
 		t.$mask.fadeIn(t.opts.speed)
