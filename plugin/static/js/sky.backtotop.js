@@ -52,6 +52,19 @@
 		}).trigger('scroll');
 	}
 
+	// 滚动
+	BackToTop.prototype.scroll = function(){  
+		var t = this;
+
+		var scrollTop = $win.scrollTop();
+
+		if(scrollTop >= t.max){  
+			t.$btn.fadeIn();
+		}else{
+			t.$btn.fadeOut();
+		}
+	}
+
 	// 开始
 	BackToTop.prototype.play = function(){
 		var t = this;
@@ -85,19 +98,6 @@
 			t.stop();
 		}else{
 			$win.scrollTop(scrollTop - speed);
-		}
-	}
-
-	// 滚动
-	BackToTop.prototype.scroll = function(){  
-		var t = this;
-
-		var scrollTop = $win.scrollTop();
-
-		if(scrollTop >= t.max){  
-			t.$btn.fadeIn();
-		}else{
-			t.$btn.fadeOut();
 		}
 	}
 

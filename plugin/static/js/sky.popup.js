@@ -14,7 +14,7 @@
 ;(function(window, $){
 	'use strict';
 
-	// 转数组
+	// 转类数组
 	var slice = Array.prototype.slice;
 	
 	// 是否是函数
@@ -41,6 +41,7 @@
 
 		return jq;
 	};
+
 
 	// 构造器
 	function Popup(elem, options){  
@@ -233,7 +234,7 @@
 		}
 
 		// 添加resize事件并执行
-		$(window).on('resize.popup', function(){
+		$(window).on('resize.Popup', function(){
 			t.centred();
 		}).trigger('resize');
 
@@ -246,7 +247,7 @@
 		var t = this;
 
 		// 移除resize事件
-		$(window).off('.popup');
+		$(window).off('.Popup');
 
 		t.$container.fadeOut(t.opts.speed);
 		t.$mask.fadeOut(t.opts.speed);
@@ -262,7 +263,7 @@
 	// 遮罩层DOM
 	Popup.mask = document.createElement('div');
 
-	Popup.zIndex = 99999;
+	Popup.zIndex = 9999999;
 
 	// 默认参数
 	Popup.defaultOpts = {
