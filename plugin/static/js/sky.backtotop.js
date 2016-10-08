@@ -94,7 +94,9 @@
 		var speed = scrollTop / t.opts.speed;
 
 		if(scrollTop === 0){  
+			// 恢复滚轮
 			$win.off('.BackToTop');
+			
 			t.stop();
 		}else{
 			$win.scrollTop(scrollTop - speed);
