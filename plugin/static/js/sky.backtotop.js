@@ -86,7 +86,7 @@
 		window.clearInterval(t.timer);
 	}
 
-	// tick
+	// tick  核心算法
 	BackToTop.prototype.tick = function(){
 		var t = this;
 
@@ -109,7 +109,7 @@
 		isAuto: true,			//是否自动显隐
 		speed: 4,				//移动速度,越大速度越慢
 		max: null,				//显隐临界点
-		timerSpeed: 50			//定时器执行速度
+		time: 50			//定时器执行速度
 	};
 	
 

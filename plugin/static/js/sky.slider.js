@@ -62,12 +62,12 @@
 		var upperName = t.opts.effect.charAt(0).toUpperCase() + t.opts.effect.substr(1);
 		t.effectFn = t['changeBy' + upperName];
 
-		t.updateLayout();
+		t.initLayout();
 		t.ininEvents();
 	}
 
 	// 更新布局
-	Slider.prototype.updateLayout = function(){
+	Slider.prototype.initLayout = function(){
 		var t = this;
 
 		t.$wrapper.css('position', 'relative');
