@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>scrollbar</title>
+	<link rel="stylesheet" href="static/css/reset.css">
+	<style type="text/css">
+		.scrollbar-container{
+			width: 500px;
+			height: 300px;
+			margin: 100px auto 0;
+			text-align: center;
+			border: 1px solid steelblue;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.scrollbar{
+			width: 20px;
+			background-color: #000;
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+		.scrollbar .bar{
+			background-color: steelblue;
+			cursor: pointer;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+		}
+		
+		.scrollbar-panel{
+
+		}
+		.scrollbar-panel p:nth-child(10n){
+			background-color: steelblue;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="scrollbar-container">
+		<div class="scrollbar"><span class="bar"></span></div>
+		<div class="scrollbar-panel">
+			
+		</div>
+	</div>
+
+	<script type="text/javascript" src="static/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="static/js/sky.scrollbar.js"></script>
+	<script type="text/javascript">
+
+		generator('.scrollbar-panel', 80);
+
+		// 内容生成器
+		function generator(selector, number){
+			var container = document.querySelector(selector);
+			var frag = document.createDocumentFragment();
+
+			for(var i = 0; i < number; i++){
+				var p = document.createElement('p');
+				p.innerHTML = i;
+				frag.appendChild(p);
+			}
+
+			container.appendChild(frag);
+		}
+
+		
+		$(document).ready(function(){
+
+			$('.scrollbar-container').skyScrollBar({
+				scrollbar: '.scrollbar',
+				bar: '.bar',
+				panel: '.scrollbar-panel'
+			});
+
+		});
+	</script>
+
+</body>
+</html>

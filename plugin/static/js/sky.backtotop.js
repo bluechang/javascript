@@ -76,7 +76,7 @@
 
 		t.timer = setInterval(function(){
 			t.tick();
-		}, t.opts.timerSpeed);
+		}, t.opts.time);
 	}
 
 	// 停止
