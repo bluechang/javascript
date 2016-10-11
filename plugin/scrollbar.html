@@ -32,12 +32,14 @@
 			top: 0;
 		}
 		
-		.scrollbar-panel{
-
-		}
 		.scrollbar-panel p:nth-child(10n){
 			background-color: steelblue;
 			color: #fff;
+		}
+
+		.btn{
+			margin-top: 100px;
+			text-align: center;
 		}
 	</style>
 </head>
@@ -45,16 +47,22 @@
 	
 	<div class="scrollbar-container">
 		<div class="scrollbar"><span class="bar"></span></div>
-		<div class="scrollbar-panel">
-			
-		</div>
+		<div class="scrollbar-panel"></div>
+	</div>
+
+	<div class="btn">
+		<button class="btn-add">增加</button>
+		<button class="btn-go">到具体位置</button>
+		<button class="btn-reset">重置</button>
 	</div>
 
 	<script type="text/javascript" src="static/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="static/js/sky.scrollbar.js"></script>
 	<script type="text/javascript">
 
-		generator('.scrollbar-panel', 80);
+		var num = 80;
+
+		generator('.scrollbar-panel', num);
 
 		// 内容生成器
 		function generator(selector, number){
@@ -73,11 +81,26 @@
 		
 		$(document).ready(function(){
 
-			$('.scrollbar-container').skyScrollBar({
+			var scrollbar = $('.scrollbar-container').skyScrollBar({
 				scrollbar: '.scrollbar',
 				bar: '.bar',
-				panel: '.scrollbar-panel'
+				panel: '.scrollbar-panel',
+				speed: 30,							//滚动距离
+				time: 100							//滚动时间
 			});
+
+			$('.btn-add').on('click', function(){
+				$('.scrollbar-panel').append('<p>'+ (num++) +'</p>');
+				scrollbar.updateLayout();
+			})
+
+			$('.btn-go').on('click', function(){  
+				scrollbar.jump(200);
+			})
+
+			$('.btn-reset').on('click', function(){  
+				scrollbar.jump(0);
+			})
 
 		});
 	</script>

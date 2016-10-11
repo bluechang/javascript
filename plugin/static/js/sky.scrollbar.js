@@ -14,6 +14,8 @@
 ;(function(window, $){
 	'use strict';
 
+	var $doc = $(document);
+
 	// 获取jQuery对象
 	var getJq = function(selector, context){
 		var jq = null;
@@ -42,8 +44,8 @@
 		t.opts = $.extend(true, {}, ScrollBar.defaultOpts, options || {});
 
 		t.$container = $(elem);
-		t.$scrollbar = getJq(t.opts.scrollbar);
-		t.$panel = getJq(t.opts.panel);
+		t.$scrollbar = getJq(t.opts.scrollbar, t.$container);
+		t.$panel = getJq(t.opts.panel, t.$container);
 		t.$bar = t.$scrollbar.children(t.opts.bar);
 
 		t.initialize();
@@ -53,6 +55,7 @@
 		var t = this;
 
 		t.panelElem = t.$panel.get(0);
+		t.barElem = t.$bar.get(0);  
 
 		t.contianerWidth = t.$container.width();
 		t.contianerHeight = t.$container.height();
@@ -82,6 +85,24 @@
 		t.updateLayout();
 	}
 
+	// 设置比率
+	ScrollBar.prototype.setAspect = function(){
+		var t = this;
+
+		t.maxScrollTop = t.panelElem.scrollHeight - t.contianerHeight;
+
+		if(t.scrollTop < 0){
+			t.scrollTop = 0;
+		}
+
+		if(t.scrollTop > t.maxScrollTop){
+			t.scrollTop = t.maxScrollTop;
+		}
+
+		t.aspectTop = t.scrollTop / t.panelElem.scrollHeight;
+		t.aspectHeight = t.contianerHeight / t.panelElem.scrollHeight; 
+	}
+
 	// 更新布局
 	ScrollBar.prototype.updateLayout = function(){
 		var t = this;
@@ -95,33 +116,7 @@
 				.animate({top: t.aspectTop * t.scrollbarHeight}, t.opts.time);
 	}
 
-	// 设置比率
-	ScrollBar.prototype.setAspect = function(){
-		var t = this;
-
-		t.maxScrollTop = t.panelElem.scrollHeight - t.contianerHeight;
-		t.maxBarTop = t.scrollbarHeight - parseFloat(t.$bar.height()) / 2;
-
-		if(t.scrollTop < 0){
-			t.scrollTop = 0;
-		}
-
-		if(t.scrollTop > t.maxScrollTop){
-			t.scrollTop = t.maxScrollTop;
-		}
-
-		if(t.barTop < 0){
-			t.barTop = 0
-		}
-
-		if(t.barTop > t.maxBarTop){
-			t.barTop = t.maxBarTop;
-		}
-
-		t.aspectTop = t.scrollTop / t.panelElem.scrollHeight;
-		t.aspectHeight = t.contianerHeight / t.panelElem.scrollHeight; 
-	}
-
+	// 初始化事件
 	ScrollBar.prototype.initEvents = function(){
 		var t = this;
 
@@ -135,7 +130,7 @@
 		var t = this;
 
 		var k;
-		var wheelEvent = 'wheel.ScrollBar mousewheel.ScrollBar DOMMouseScroll.ScrollBar';
+		var wheelEvent = 'wheel mousewheel DOMMouseScroll';
 
 		t.$container.on(wheelEvent, function(e){		
 
@@ -148,26 +143,84 @@
 		});
 	}
 
+	// 获取相对于scrollbar的鼠标坐标
+	ScrollBar.prototype.getPos = function(event){
+		var t = this;
+
+		return {
+			x: event.clientX - t.$scrollbar.offset().left,
+			y: event.clientY - t.$scrollbar.offset().top
+		};
+	}
+
 	// scrollbar事件
 	ScrollBar.prototype.scrollbarEvent = function(){
 		var t = this;
 
-		function getPos(){
-			var top;
-
-			return top;
-		};
-
 		t.$scrollbar.on('click', function(e){
-
+			t.setScrollbar(e);
 		});
+	}
+
+	ScrollBar.prototype.setScrollbar = function(e){
+		var t = this;
+
+		var pos = t.getPos(e);
+
+		// bar的位移 转成 panel的scrollTop,  鼠标居于滑块中心
+		t.scrollTop = (pos.y - t.barElem.offsetHeight/2) / t.scrollbarHeight * t.panelElem.scrollHeight;
+
+		t.updateLayout();
 	}
 
 	// bar事件
 	ScrollBar.prototype.barEvent = function(){
 		var t = this;
 
+		t.$bar.on('click', function(e){
+			return false;
+		});
 
+		// 按下
+		t.$bar.on('mousedown', function(e){
+			var pos = t.getPos(e);
+
+			var disX = pos.x - t.$bar.position().left,
+				disY = pos.y - t.$bar.position().top;
+
+			$doc.on('mousemove.ScrollBar', function(e){
+				t.setBar(e, disY);	
+			})
+
+			// 移动期间,禁用选取
+			$doc.on('selectstart.ScrollBar', function(){
+				return false;
+			})
+
+			// 松开时, 删除ScrollBar域中的所有事件
+			$doc.on('mouseup.ScrollBar', function(){
+				$doc.off('.ScrollBar');
+			});
+		});
+	}
+
+	ScrollBar.prototype.setBar = function(event, distance){
+		var t = this;
+
+		var pos = t.getPos(event);    
+
+		// bar的位移 转 panel的scrollTop
+		t.scrollTop = (pos.y - distance) / t.scrollbarHeight * t.panelElem.scrollHeight;
+
+		t.updateLayout();
+	}
+
+	// 调到具体位置
+	ScrollBar.prototype.jump = function(number){
+		var t = this;
+
+		t.scrollTop = parseFloat(number);
+		t.updateLayout();
 	}
 
 	// 默认参数
@@ -175,8 +228,8 @@
 		scrollbar: '.scrollbar',
 		bar: '.bar',
 		panel: '.scrollbar-panel',
-		speed: 30,
-		time: 60
+		speed: 30,						//滚动距离
+		time: 100						//滚动时间
 	};
 	
 
