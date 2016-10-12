@@ -2,7 +2,26 @@
 /**
  *
  * scrollBar:
+ *
+ * 滚动条是：滑块移动，滚动条不动
+ * 窗口是：  整个内容移动，窗口不动
+ *
+ * 窗口滚动 等价于 滑块的top在移动
+ * 窗口高度 等价于 滑块的高度
+ *
+ * 位移、高度不同，但比率相同
+ *
+ * 滚动比：
+ * panel.scrollTop / panel.scrollHeight == bar.top / scrollbar.height
+ * 高度比：
+ * container.height / panel.scrollHeight == bar.offsetHeight / scrollbar.height
  * 
+ * 注：
+ * 1、panel的高度会变化且overflow:hidden，所以使用panel.scrollHeight来获取panel的高度
+ * 2、由于panel的变化，所以bar的高度也会跟着变化，所以使用bar.offsetHeight
+ * 3、其它变量初始化确定
+ *
+ *
  * 
  * 
  * @author: blue chang
@@ -15,7 +34,7 @@
 ;(function(window, $){
 	'use strict';
 
-	var $doc = $(document);
+	var $doc = $(window.document);
 
 	// 获取jQuery对象
 	var getJq = function(selector, context){
