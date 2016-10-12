@@ -1,6 +1,6 @@
 /**
  *
- * tab:
+ * slider:
  * 
  * 
  * @author: blue chang

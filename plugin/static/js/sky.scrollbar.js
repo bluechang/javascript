@@ -1,7 +1,8 @@
 
 /**
  *
- * popup:
+ * scrollBar:
+ * 
  * 
  * 
  * @author: blue chang
@@ -61,34 +62,16 @@
 		t.contianerHeight = t.$container.height();
 		t.scrollbarWidth = t.$scrollbar.width();
 		t.scrollbarHeight = t.$scrollbar.height();
-		t.panelWidth = t.panelElem.scrollWidth;
-		t.panelHeight = t.panelElem.scrollHeight;
-
-		if(t.contianerHeight >= t.panelHeight){
-			t.$scrollbar.hide();
-			return;
-		}
-
-		t.initLayout();
-		t.initEvents();
-	};
-
-	ScrollBar.prototype.initLayout = function(){ 
-		var t = this;
-
-		t.$panel.css({
-			width: '100%',
-			height: '100%',
-			overflow: 'hidden'
-		});
 
 		t.updateLayout();
-	}
+		t.initEvents();
+	};
 
 	// 设置比率
 	ScrollBar.prototype.setAspect = function(){
 		var t = this;
 
+		// 最大滚动距离
 		t.maxScrollTop = t.panelElem.scrollHeight - t.contianerHeight;
 
 		if(t.scrollTop < 0){
@@ -99,7 +82,9 @@
 			t.scrollTop = t.maxScrollTop;
 		}
 
+		// 距顶比
 		t.aspectTop = t.scrollTop / t.panelElem.scrollHeight;
+		// 高度比
 		t.aspectHeight = t.contianerHeight / t.panelElem.scrollHeight; 
 	}
 
@@ -107,10 +92,16 @@
 	ScrollBar.prototype.updateLayout = function(){
 		var t = this;
 
+		// 更新比率
 		t.setAspect();
 
+		// 更新panel
 		t.$panel.scrollTop(t.scrollTop);
 
+		// 更新scrollBar
+		t.contianerHeight >= t.panelElem.scrollHeight ? t.$scrollbar.hide() : t.$scrollbar.show();
+
+		// 更新bar
 		t.$bar.css('height', t.aspectHeight * t.scrollbarHeight)
 				.stop(true, true)
 				.animate({top: t.aspectTop * t.scrollbarHeight}, t.opts.time);
@@ -129,7 +120,7 @@
 	ScrollBar.prototype.wheelEvent = function(){
 		var t = this;
 
-		var k;
+		var k;		// 系数
 		var wheelEvent = 'wheel mousewheel DOMMouseScroll';
 
 		t.$container.on(wheelEvent, function(e){		
@@ -138,7 +129,6 @@
 			k = (e.deltaY || -e.wheelDelta || e.detail) > 0 ? 1 : -1;
 
 			t.scrollTop = t.$panel.scrollTop() + k*t.opts.speed;
-
 			t.updateLayout();
 		});
 	}
@@ -167,9 +157,8 @@
 
 		var pos = t.getPos(e);
 
-		// bar的位移 转成 panel的scrollTop,  鼠标居于滑块中心
+		// bar的位移 转成 panel的scrollTop,  且鼠标居于滑块中心
 		t.scrollTop = (pos.y - t.barElem.offsetHeight/2) / t.scrollbarHeight * t.panelElem.scrollHeight;
-
 		t.updateLayout();
 	}
 
@@ -177,6 +166,7 @@
 	ScrollBar.prototype.barEvent = function(){
 		var t = this;
 
+		// 阻止冒泡到scrollBar上
 		t.$bar.on('click', function(e){
 			return false;
 		});
@@ -185,9 +175,9 @@
 		t.$bar.on('mousedown', function(e){
 			var pos = t.getPos(e);
 
-			var disX = pos.x - t.$bar.position().left,
-				disY = pos.y - t.$bar.position().top;
+			var disY = pos.y - t.$bar.position().top;
 
+			// 移动
 			$doc.on('mousemove.ScrollBar', function(e){
 				t.setBar(e, disY);	
 			})
@@ -211,7 +201,6 @@
 
 		// bar的位移 转 panel的scrollTop
 		t.scrollTop = (pos.y - distance) / t.scrollbarHeight * t.panelElem.scrollHeight;
-
 		t.updateLayout();
 	}
 
@@ -225,11 +214,11 @@
 
 	// 默认参数
 	ScrollBar.defaultOpts = {
-		scrollbar: '.scrollbar',
-		bar: '.bar',
-		panel: '.scrollbar-panel',
-		speed: 30,						//滚动距离
-		time: 100						//滚动时间
+		scrollbar: '.scrollbar',			//滚动条
+		bar: '.bar',						//滑块
+		panel: '.scrollbar-panel',			//内容面板
+		speed: 30,							//滚轮每次滚动距离
+		time: 100							//滑块滚动时间
 	};
 	
 
