@@ -65,9 +65,6 @@
 	<script type="text/javascript" src="static/js/sky.scrollbar.js"></script>
 	<script type="text/javascript">
 
-		// 生成个数
-		var num = 18;
-
 		// 内容生成器
 		function generator(selector, number){
 			var container = document.querySelector(selector);
@@ -82,6 +79,8 @@
 			container.appendChild(frag);
 		}
 
+		// 生成个数
+		var num = 18;
 		generator('.scrollbar-panel', num);
 
 		
