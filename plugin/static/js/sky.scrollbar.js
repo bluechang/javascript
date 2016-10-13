@@ -48,6 +48,7 @@
 			}
 		}else{
 			jq = $(selector, context);
+			// 递归
 			if(jq.length === 0){
 				getJq(selector, window.document);
 			}
@@ -171,10 +172,10 @@
 		});
 	}
 
-	ScrollBar.prototype.setScrollbar = function(e){
+	ScrollBar.prototype.setScrollbar = function(event){
 		var t = this;
 
-		var pos = t.getPos(e);
+		var pos = t.getPos(event);
 
 		// bar的位移 转成 panel的scrollTop,  且鼠标居于滑块中心
 		t.scrollTop = (pos.y - t.barElem.offsetHeight/2) / t.scrollbarHeight * t.panelElem.scrollHeight;
