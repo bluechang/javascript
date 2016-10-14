@@ -69,9 +69,11 @@
 	BackToTop.prototype.play = function(){
 		var t = this;
 
-		// 运动期间 滚轮事件 失效
-		$win.on('wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop', function(e){   
-			e.preventDefault();
+		var wheelName = 'wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop';
+
+		// 运动期间 禁用滚轮
+		$win.on(wheelName, function(e){   
+			return false;
 		});
 
 		t.timer = setInterval(function(){
@@ -86,11 +88,13 @@
 		window.clearInterval(t.timer);
 	}
 
-	// tick  核心算法
+	// tick  
+	// 核心算法和逻辑
 	BackToTop.prototype.tick = function(){
 		var t = this;
 
 		var scrollTop = $win.scrollTop();
+		// 速度
 		var speed = scrollTop / t.opts.speed;
 
 		if(scrollTop === 0){  
@@ -99,6 +103,7 @@
 			
 			t.stop();
 		}else{
+			// 实现滚动
 			$win.scrollTop(scrollTop - speed);
 		}
 	}

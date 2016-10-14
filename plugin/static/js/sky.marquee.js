@@ -62,11 +62,11 @@
 			t.$slides = t.$wrap.children();
 		}
 
-		t.initStyle();
+		t.initLayout();
 		t.initEvents();
 	}
 
-	Marquee.prototype.initStyle = function(){
+	Marquee.prototype.initLayout = function(){
 		var t = this;
 
 		// 设置slide
@@ -116,16 +116,20 @@
 		window.clearInterval(t.timer);
 	}
 
-	// 执行 核心算法
+	// tick 
+	// 核心算法和逻辑
 	Marquee.prototype.tick = function(){ 
 		var t = this;					
 
+		// 滚动距离
 		var distance = Math.abs( parseInt( t.$wrap.css(t.cssProp) ) ) || 0;  
 
+		// 修正滚动
 		if(distance >= t.maxDistance){
 			t.$wrap.css(t.cssProp, 0);
 		}
 
+		// 实现滚动
 		t.$wrap.css(t.cssProp, '-=' + t.opts.speed);
 	}
 

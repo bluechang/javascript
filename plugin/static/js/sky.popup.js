@@ -35,6 +35,7 @@
 		}else{
 			jq = $(selector, context);
 			if(jq.length === 0){
+				// 递归
 				getJq(selector, window.document);
 			}
 		}
@@ -224,6 +225,7 @@
 	};
 
 	// 显示
+	// 核心逻辑
 	Popup.prototype.show = function(){
 		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
 		// 来引用当前显示的弹窗
@@ -243,6 +245,7 @@
 	};
 
 	// 隐藏
+	// 核心逻辑
 	Popup.prototype.hide = function(){
 		var t = this;
 

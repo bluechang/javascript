@@ -11,6 +11,7 @@
  *
  * 位移、高度不同，但比率相同
  *
+ * 核心算法：
  * 滚动比：
  * panel.scrollTop / panel.scrollHeight == bar.top / scrollbar.height
  * 高度比：
@@ -109,6 +110,7 @@
 	}
 
 	// 更新布局
+	// 核心逻辑
 	ScrollBar.prototype.updateLayout = function(){
 		var t = this;
 
