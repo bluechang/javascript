@@ -240,11 +240,11 @@
 		wrapper: '.slider-wrapper',					//slide容器
 		slide: '.slider-slide',						//slide
 
-		btnPrev: '.slider-btn-prev',				//上一个按钮	
-		btnNext: '.slider-btn-next',				//下一个按钮
+		btnPrev: null,								//上一个按钮	
+		btnNext: null,								//下一个按钮
 
 		eventType: 'mouseover',						//指示器事件
-		indicator: '.slider-indicator',				//指示器容器
+		indicator: null,							//指示器容器
 		indicatorChildTag: 'a',						//指示器容器子标签
 		dot: '.slider-dot',							//指示器子元素类名
 		active: 'on',								//指示器当前类名

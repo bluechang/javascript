@@ -13,7 +13,7 @@
 			position: fixed;
 			top: 50%;
 		}
-		.slidebar .switch{
+		.slidebar .switcher{
 			width: 30px;
 			height: 30px;
 			position: absolute;
@@ -29,14 +29,14 @@
 		.slidebar-l{
 			left: 0;
 		}
-		.slidebar-l .switch{
+		.slidebar-l .switcher{
 			left: 100%;
 		}
 		
 		.slidebar-r{
 			right: 0;
 		}
-		.slidebar-r .switch{
+		.slidebar-r .switcher{
 			right: 100%;
 		}
 	</style>
@@ -44,16 +44,16 @@
 <body>
 	
 	<div class="slidebar slidebar-l" id="sliderbar1">
-		<a href="javascript:;" class="switch"></a>
+		<a href="javascript:;" class="switcher"></a>
 		<div class="main">
-			main-left
+			left
 		</div>
 	</div>
 
 	<div class="slidebar slidebar-r" id="sliderbar1">
-		<a href="javascript:;" class="switch"></a>
+		<a href="javascript:;" class="switcher"></a>
 		<div class="main">
-			main-right
+			right
 		</div>
 	</div>
 
@@ -61,22 +61,22 @@
 	<script type="text/javascript" src="static/js/sky.slidebar.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('.slidebar-l').slidebar({
-					switch: '.switch',			//开关
-					switchOn: 'switch-off',  	//开关打开状态
-					switchOff: 'switch-on',  	//开关关闭状态
-					hasPadding: true,			//切换的宽度是否包含内边距
-					speed: 300,
-					isShow: true,				//是否显示
+			$('.slidebar-l').skySlidebar({
+					switch: '.switcher',						//开关
+					switchOn: 'switch-off',  					//开关打开状态
+					switchOff: 'switch-on',  					//开关关闭状态
+					hasPadding: true,							//切换的宽度是否包含内边距
+					speed: 300,				
+					isShow: true,								//是否显示
 			});
 
-			$('.slidebar-r').slidebar({
-					switch: '.switch',			//开关
-					switchOn: 'switch-off',  	//开关打开状态
-					switchOff: 'switch-on',  	//开关关闭状态
-					hasPadding: true,			//切换的宽度是否包含内边距
-					speed: 300,
-					isShow: true,				//是否显示
+			$('.slidebar-r').skySlidebar({
+					switch: '.switcher',						//开关
+					switchOn: 'switch-off',  					//开关打开状态
+					switchOff: 'switch-on',  					//开关关闭状态
+					hasPadding: true,							//切换的宽度是否包含内边距
+					speed: 300,				
+					isShow: true,								//是否显示
 			});
 		});
 	</script>

@@ -41,7 +41,7 @@
 		t.$container = $(elem);
 
 		//开关
-		t.$switch = getJq( t.opts.switch, t.$container );
+		t.$switcher = getJq( t.opts.switcher, t.$container );
 		//父容器宽度,即展开和收起的宽度
 		t.containerWidth = t.opts.hasPadding ? t.$container.outerWidth() : t.$container.width(); 
 		//是否显示内容	
@@ -96,7 +96,7 @@
 	Slidebar.prototype.clickDelegete = function(){
 		var t = this;
 
-		t.$switch.on('click', function(){
+		t.$switcher.on('click', function(){
 			t.isShow ? t.close() : t.open();
 		});
 	}
@@ -117,7 +117,7 @@
  		var t = this;
 
  		t.isShow = true;
- 		t.$switch.removeClass(t.opts.switchOff).addClass(t.opts.switchOn);
+ 		t.$switcher.removeClass(t.opts.switchOff).addClass(t.opts.switchOn);
 		t.$container.stop(true).animate( 
 			t.direction == 'right' ? { right: 0 } : { left: 0 }, 
 			t.opts.speed 
@@ -129,7 +129,7 @@
 		var t = this;
 
 		t.isShow = false;
-		t.$switch.removeClass(t.opts.switchOn).addClass(t.opts.switchOff);
+		t.$switcher.removeClass(t.opts.switchOn).addClass(t.opts.switchOff);
 		t.$container.stop(true).animate( 
 			t.direction == 'right' ? { right: -t.containerWidth } : { left: -t.containerWidth }, 
 			t.opts.speed 
@@ -140,13 +140,13 @@
 
 	// 默认参数
 	Slidebar.defaultOpts = {
-		eventType: 'click',			//事件类型	[hover, click]
-		switch: '.switch',			//开关选择器
-		switchOn: 'switch-off', 	//开关打开时状态
-		switchOff: 'switch-on', 	//开关关闭时状态
-		hasPadding: true, 			//切换时, 移动的距离是否包含内边距和边框
-		isShow: true,				//是否显示
-		speed: 300					//动画时长
+		eventType: 'click',							//事件类型	[hover, click]
+		switcher: '.switcher',						//开关选择器
+		switchOn: 'switch-off', 					//开关打开时状态
+		switchOff: 'switch-on', 					//开关关闭时状态
+		hasPadding: true, 							//切换时, 移动的距离是否包含内边距和边框
+		isShow: true,								//是否显示
+		speed: 300									//动画时长
 	}
 
 	//挂载到jquery对象
