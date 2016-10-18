@@ -36,7 +36,7 @@
 			jq = $(selector, context);
 			if(jq.length === 0){
 				// 递归
-				getJq(selector, window.document);
+				jq = getJq(selector, window.document);
 			}
 		}
 

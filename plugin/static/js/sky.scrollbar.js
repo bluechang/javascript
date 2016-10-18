@@ -51,7 +51,7 @@
 			jq = $(selector, context);
 			// 递归
 			if(jq.length === 0){
-				getJq(selector, window.document);
+				jq = getJq(selector, window.document);
 			}
 		}
 

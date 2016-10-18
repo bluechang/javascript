@@ -18,14 +18,14 @@
 
 		if(context === window.document){
 			jq = $(selector);
-			if(jq.length === 0){
+			/*if(jq.length === 0){
 				throw new Error('$("' + selector + '") is not exist!!!');
-			}
+			}*/
 		}else{
 			jq = $(selector, context);
 			if(jq.length === 0){
 				// 递归
-				getJq(selector, window.document);
+				jq = getJq(selector, window.document);
 			}
 		}
 
@@ -40,9 +40,9 @@
 
 		t.$container = $(elem);
 		t.$wrapper = getJq(t.opts.wrapper, t.$container);
-		t.$btnPrev = t.$container.find(t.opts.btnPrev);
-		t.$btnNext = t.$container.find(t.opts.btnNext);
-		t.$indicator = t.$container.find(t.opts.indicator);
+		t.$btnPrev = getJq(t.opts.btnPrev, t.$container);
+		t.$btnNext = getJq(t.opts.btnNext, t.$container);
+		t.$indicator = getJq(t.opts.indicator, t.$container);
 
 		t.$slides = t.$wrapper.children(t.opts.slide);
 
@@ -67,7 +67,7 @@
 		t.ininEvents();
 	}
 
-	// 更新布局
+	// 初始化布局
 	Slider.prototype.initLayout = function(){
 		var t = this;
 
@@ -87,6 +87,7 @@
 		}
 	}
 
+	// 初始化指示器
 	Slider.prototype.initIndicator = function(){  
 		var t = this;
 
@@ -109,6 +110,7 @@
 		});
 	}
 
+	// 初始化事件
 	Slider.prototype.ininEvents = function(){
 		var t = this;
 
@@ -127,21 +129,15 @@
 				t.$btnPrev.stop(true).fadeIn();
 				t.$btnNext.stop(true).fadeIn();
 			}
-			t.stop();
 		},function(){
 			if(t.opts.autoArrowVisible){
 				t.$btnPrev.stop(true).fadeOut();
 				t.$btnNext.stop(true).fadeOut();
 			}
-			if(t.opts.autoPlay){
-				t.play();
-			}
 		});
 
-		// 初始化播放
-		if(t.opts.autoPlay){
-			t.play();
-		}
+		// 自动播放
+		t.checkAutoPlay();
 	}
 
 	// fade
@@ -179,18 +175,18 @@
 				.animate({left: 0}, t.opts.speed, doFinish);
 	}
 
-	Slider.prototype.play = function(){
-		var t = this;
+	Slider.prototype.checkAutoPlay = function(){  
+		var t = this;			
 
-		t.timer = window.setInterval(function(){
-			t.next();
-		}, t.opts.autoDelay);
-	}
-
-	Slider.prototype.stop = function(){
-		var t = this;
-
-		t.timer && window.clearInterval(t.timer);
+		if(t.opts.autoPlay){  
+			if(t.timer){
+				window.clearTimeout(t.timer);
+				t.timer = null;
+			}
+			t.timer = window.setTimeout(function(){ 
+				t.next();
+			}, t.opts.autoDelay);
+		}		
 	}
 
 	// 上一个
@@ -230,6 +226,8 @@
 			t.$dots.removeClass(t.opts.active)
 					.eq(index).addClass(t.opts.active);
 		}
+
+		t.checkAutoPlay();
 	}
 
 	// 默认参数
