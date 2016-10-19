@@ -18,7 +18,7 @@
  * container.height / panel.scrollHeight == bar.offsetHeight / scrollbar.height
  * 
  * 注：
- * 1、panel的高度会变化且overflow:hidden，所以使用panel.scrollHeight来获取panel的高度
+ * 1、panel的高度会变化且overflow:hidden时, jquery不能获取滚动的总大小，必须使用panel.scrollHeight来获取panel的总高度
  * 2、由于panel的变化，所以bar的高度也会跟着变化，所以使用bar.offsetHeight
  * 3、其它变量初始化确定
  *
@@ -42,13 +42,13 @@
 		var jq = null;
 		context = context || window.document;
 
-		if(context === window.document){
+		if(context === window.document){	
 			jq = $(selector);
 			if(jq.length === 0){
 				throw new Error('$("' + selector + '") is not exist!!!');
 			}
 		}else{
-			jq = $(selector, context);
+			jq = $(selector, context);  
 			// 递归
 			if(jq.length === 0){
 				jq = getJq(selector, window.document);
@@ -66,8 +66,8 @@
 		t.opts = $.extend(true, {}, ScrollBar.defaultOpts, options || {});
 
 		t.$container = $(elem);
-		t.$scrollbar = getJq(t.opts.scrollbar, t.$container);
 		t.$panel = getJq(t.opts.panel, t.$container);
+		t.$scrollbar = getJq(t.opts.scrollbar, t.$container);
 		t.$bar = t.$scrollbar.children(t.opts.bar);
 
 		t.initialize();
@@ -79,54 +79,72 @@
 		t.panelElem = t.$panel.get(0);
 		t.barElem = t.$bar.get(0);  
 
-		t.contianerWidth = t.$container.width();
-		t.contianerHeight = t.$container.height();
-		t.scrollbarWidth = t.$scrollbar.width();
-		t.scrollbarHeight = t.$scrollbar.height();
+		t.scrollVal = 0;
 
-		t.updateLayout();
+		if(t.opts.direction === 'vertical'){
+			t.containerSize = t.$container.height();					// 确定需要的容器大小
+			t.scrollbarSize = t.$scrollbar.height();					// 确定需要的滚动条大小
+			t.scrollTotalProp = 'scrollHeight';							// 确定需要滚动总大小的属性
+			t.scrollAspect = 'scrollTop';								// 确定滚动方位
+
+			t.barSizeCss = 'height';									// 确定bar大小的css属性
+			t.barPosCss = 'top';										// 确定bar方位的css属性
+		}
+
+		if(t.opts.direction === 'horizontal'){
+			t.containerSize = t.$container.width();
+			t.scrollbarSize = t.$scrollbar.width();
+			t.scrollTotalProp = 'scrollWidth';
+			t.scrollAspect = 'scrollLeft';
+
+			t.barSizeCss = 'width';
+			t.barPosCss = 'left';
+		}
+
+		t.updateLayout();    
 		t.initEvents();
 	};
 
 	// 设置比率
-	ScrollBar.prototype.setAspect = function(){
+	ScrollBar.prototype.setAspectRatio = function(){
 		var t = this;
 
 		// 最大滚动距离
-		t.maxScrollTop = t.panelElem.scrollHeight - t.contianerHeight;
-
-		if(t.scrollTop < 0){
-			t.scrollTop = 0;
+		t.maxScrollVal = t.panelElem[t.scrollTotalProp] - t.containerSize; 
+		
+		if(t.scrollVal < 0){
+			t.scrollVal = 0;
 		}
 
-		if(t.scrollTop > t.maxScrollTop){
-			t.scrollTop = t.maxScrollTop;
+		if(t.scrollVal > t.maxScrollVal){
+			t.scrollVal = t.maxScrollVal;
 		}
 
-		// 距顶比
-		t.aspectTop = t.scrollTop / t.panelElem.scrollHeight;
-		// 高度比
-		t.aspectHeight = t.contianerHeight / t.panelElem.scrollHeight; 
+		// 距顶/左比
+		t.aspectTop = t.scrollVal / t.panelElem[t.scrollTotalProp];
+		// 大小比
+		t.aspectSize = t.containerSize / t.panelElem[t.scrollTotalProp];
 	}
 
 	// 更新布局
 	// 核心逻辑
-	ScrollBar.prototype.updateLayout = function(){
+	ScrollBar.prototype.updateLayout = function(){    
 		var t = this;
 
 		// 更新比率
-		t.setAspect();
+		t.setAspectRatio();		
 
 		// 更新panel
-		t.$panel.scrollTop(t.scrollTop);
+		t.$panel[t.scrollAspect]( t.scrollVal );   
 
 		// 更新scrollBar
-		t.contianerHeight >= t.panelElem.scrollHeight ? t.$scrollbar.hide() : t.$scrollbar.show();
+		t.containerSize >= t.panelElem[t.scrollTotalProp] ? t.$scrollbar.hide() : t.$scrollbar.show(); 
 
 		// 更新bar
-		t.$bar.css('height', t.aspectHeight * t.scrollbarHeight)
+		// JSON字符串转JSON对象
+		t.$bar.css(t.barSizeCss, t.aspectSize * t.scrollbarSize)
 				.stop(true, true)
-				.animate({top: t.aspectTop * t.scrollbarHeight}, t.opts.time);
+				.animate($.parseJSON('{"' + t.barPosCss + '":' + Math.ceil(t.aspectTop * t.scrollbarSize) + '}'), t.opts.time);
 	}
 
 	// 初始化事件
@@ -144,25 +162,38 @@
 
 		var k;		// 系数
 		var wheelEvent = 'wheel mousewheel DOMMouseScroll';
+		var docWheelEvent = 'wheel.DocWheel mousewheel.DocWheel DOMMouseScroll.DocWheel';
 
 		t.$container.on(wheelEvent, function(e){		
 
 			e = e.originalEvent;								
 			k = (e.deltaY || -e.wheelDelta || e.detail) > 0 ? 1 : -1;
 
-			t.scrollTop = t.$panel.scrollTop() + k*t.opts.speed;
+			t.scrollVal = t.panelElem[t.scrollAspect] + k*t.opts.speed;
 			t.updateLayout();
+		});
+
+		// 禁止浏览器滚动
+		t.$container.hover(function(){
+			$doc.on(docWheelEvent, function(){
+				return false;
+			})
+		}, function(){
+			$doc.off('.DocWheel');
 		});
 	}
 
 	// 获取相对于scrollbar的鼠标坐标
 	ScrollBar.prototype.getPos = function(event){
-		var t = this;
+		var t = this;				
 
-		return {
-			x: event.clientX - t.$scrollbar.offset().left,
-			y: event.clientY - t.$scrollbar.offset().top
-		};
+		// 出现滚动条时需加上文档滚动距离
+		// offset是相对当前文档的
+		if(t.opts.direction === 'vertical'){
+			return $doc.scrollTop() + event.clientY - t.$scrollbar.offset().top;
+		}else{
+			return $doc.scrollLeft() + event.clientX - t.$scrollbar.offset().left;
+		}
 	}
 
 	// scrollbar事件
@@ -174,13 +205,13 @@
 		});
 	}
 
-	ScrollBar.prototype.setScrollbar = function(event){
-		var t = this;
+	ScrollBar.prototype.setScrollbar = function(event){     
+		var t = this;									
 
-		var pos = t.getPos(event);
+		var pos = t.getPos(event); 		
 
 		// bar的位移 转成 panel的scrollTop,  且鼠标居于滑块中心
-		t.scrollTop = (pos.y - t.barElem.offsetHeight/2) / t.scrollbarHeight * t.panelElem.scrollHeight;
+		t.scrollVal = (pos - t.$bar[t.barSizeCss]()/2) / t.scrollbarSize * t.panelElem[t.scrollTotalProp];
 		t.updateLayout();
 	}
 
@@ -197,11 +228,11 @@
 		t.$bar.on('mousedown', function(e){
 			var pos = t.getPos(e);
 
-			var disY = pos.y - t.$bar.position().top;
+			var distance = pos - t.$bar.position()[t.barPosCss];
 
 			// 移动
 			$doc.on('mousemove.ScrollBar', function(e){
-				t.setBar(e, disY);	
+				t.setBar(e, distance);	
 			})
 
 			// 移动期间,禁用选取
@@ -222,7 +253,7 @@
 		var pos = t.getPos(event);    
 
 		// bar的位移 转 panel的scrollTop
-		t.scrollTop = (pos.y - distance) / t.scrollbarHeight * t.panelElem.scrollHeight;
+		t.scrollVal = (pos - distance) / t.scrollbarSize * t.panelElem[t.scrollTotalProp];
 		t.updateLayout();
 	}
 
@@ -230,17 +261,18 @@
 	ScrollBar.prototype.jump = function(number){
 		var t = this;
 
-		t.scrollTop = parseFloat(number);
+		t.scrollVal = parseFloat(number);
 		t.updateLayout();
 	}
 
 	// 默认参数
 	ScrollBar.defaultOpts = {
-		scrollbar: '.scrollbar',			//滚动条
-		bar: '.bar',						//滑块
-		panel: '.scrollbar-panel',			//内容面板
-		speed: 30,							//滚轮每次滚动距离
-		time: 100							//滑块滚动时间
+		direction: 'vertical',							//方向：horizontal | vertical
+		panel: '.scrollbar-panel',						//内容面板
+		scrollbar: '.scrollbar',						//滚动条
+		bar: '.bar',									//滑块
+		speed: 30,										//滚轮每次滚动距离
+		time: 100										//滑块滚动时间
 	};
 	
 
