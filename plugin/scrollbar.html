@@ -5,16 +5,19 @@
 	<title>scrollbar</title>
 	<link rel="stylesheet" href="static/css/reset.css">
 	<style type="text/css">
+		.scrollbar-wrap{
+			padding: 50px 0;
+		}
 		.scrollbar-container{
 			width: 500px;
 			height: 300px;
-			margin: 100px auto 0;
+			margin: 0 auto 50px;
 			border: 1px solid steelblue;
 			position: relative;
 			overflow: hidden;
 		}
 
-		.scrollbar-vertical .scrollbar{
+		.scrollbar-vertical .scrollbar-track{
 			width: 20px;
 			background-color: #000;
 			position: absolute;
@@ -22,7 +25,7 @@
 			top: 0;
 			bottom: 0;
 		}
-		.scrollbar-vertical .scrollbar .bar{
+		.scrollbar-vertical .scrollbar-track .bar{
 			background-color: steelblue;
 			cursor: pointer;
 			position: absolute;
@@ -31,7 +34,7 @@
 			top: 0;
 		}
 
-		.scrollbar-horizontal .scrollbar{
+		.scrollbar-horizontal .scrollbar-track{
 			height: 20px;
 			background-color: #000;
 			position: absolute;
@@ -39,7 +42,7 @@
 			right: 0;
 			bottom: 0;
 		}
-		.scrollbar-horizontal .scrollbar .bar{
+		.scrollbar-horizontal .scrollbar-track .bar{
 			background-color: steelblue;
 			cursor: pointer;
 			position: absolute;
@@ -74,7 +77,6 @@
 		}
 
 		.btn{
-			margin-top: 50px;
 			text-align: center;
 		}
 	</style>
@@ -83,7 +85,7 @@
 	
 	<div class="scrollbar-wrap">
 		<div class="scrollbar-container scrollbar-vertical">
-			<div class="scrollbar"><span class="bar"></span></div>
+			<div class="scrollbar-track"><span class="bar"></span></div>
 			<div class="scrollbar-panel"></div>
 		</div>
 
@@ -94,9 +96,11 @@
 		</div>
 	</div>
 
+
+
 	<div class="scrollbar-wrap">
 		<div class="scrollbar-container scrollbar-horizontal">
-			<div class="scrollbar"><span class="bar"></span></div>
+			<div class="scrollbar-track"><span class="bar"></span></div>
 			<div class="scrollbar-panel"></div>
 		</div>
 
@@ -135,9 +139,9 @@
 
 		// 垂直
 		var scrollbarVertical = $('.scrollbar-vertical').skyScrollBar({
-			direction: 'vertical',										//方向：垂直|水平
+			direction: 'vertical',										//方向：vertical|horizontal
 			panel: '.scrollbar-panel',									//内容面板
-			scrollbar: '.scrollbar',									//滚动条
+			track: '.scrollbar-track',									//滚动条
 			bar: '.bar',												//滑块
 			speed: 50,													//滚轮每次滚动距离
 			time: 90													//滑块滚动时间
@@ -159,9 +163,9 @@
 
 		// 水平
 		var scrollbar = $('.scrollbar-horizontal').skyScrollBar({
-			direction: 'horizontal',									//方向：垂直|水平
+			direction: 'horizontal',									//方向：vertical|horizontal
 			panel: '.scrollbar-panel',									//内容面板
-			scrollbar: '.scrollbar',									//滚动条
+			track: '.scrollbar-track',									//滚动条
 			bar: '.bar',												//滑块
 			speed: 50,													//滚轮每次滚动距离
 			time: 90													//滑块滚动时间
