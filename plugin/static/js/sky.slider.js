@@ -227,6 +227,7 @@
 					.eq(index).addClass(t.opts.active);
 		}
 
+		// 效果完成后继续执行
 		t.checkAutoPlay();
 	}
 
