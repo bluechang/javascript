@@ -64,7 +64,7 @@ swfobject.flash = function(url, containerID, width, height, vars) {
 				break;
 		}
 	}
-	swfobject.embedSWF(url, containerID, width, height, version, 'http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?' + Math.random(), flashvars, params, attributes);
+	swfobject.embedSWF(url, containerID, width, height, version, "http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?" + Math.random(), flashvars, params, attributes);
 };
 
 
