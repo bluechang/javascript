@@ -8,9 +8,11 @@ const browserSync   =	require('browser-sync').create();
 const files = {
 	html: 		['./*.html'],
 	css:  		['./static/css/**'],
-	less:  		['./static/less/**'],
-	lessMain: 	['./static/less/style.less'],
-	lessTarget: ['./static/css/'],
+	less: 		{
+		src:    './static/less/**',
+		main:   './static/less/style.less',
+		dest:   './static/css/'
+	},
 	js: 		['./static/js/**'],
 	img: 		['./static/images/**']
 };
@@ -35,13 +37,13 @@ gulp.task('css', ()=>{
 });
 
 gulp.task('less', ()=>{
-	gulp.watch(files.less, ()=>{
-		gulp.src(files.lessMain.toString())
+	gulp.watch(files.less.src, ()=>{
+		gulp.src(files.less.main)
 			.pipe(less())
 			.pipe(autoprefixer({
 				browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 			}))
-			.pipe(gulp.dest(files.lessTarget.toString()))
+			.pipe(gulp.dest(files.less.dest))
 			.pipe(browserSync.stream({once: true}));
 	});
 });
