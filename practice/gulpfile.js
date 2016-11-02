@@ -1,12 +1,11 @@
 
-
 const gulp 			= 	require('gulp');
 const gulpSequence 	= 	require('gulp-sequence');
 const browserSync   =	require('browser-sync').create();
 
 const paths = {
 	html: {
-		src: ['*.html']
+		src: ['*.html'] 
 	},
 	css: {
 		src: ['static/css/**']
