@@ -11,7 +11,7 @@
 
 
 
-;(function(window, $){
+;(function(window, $){ 
 	'use strict';
 
 	// 转类数组

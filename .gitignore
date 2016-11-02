@@ -7,6 +7,8 @@ Desktop.ini
 
 # Folder
 node_modules
+bower_components
+dist
 
 # Video
 .flv

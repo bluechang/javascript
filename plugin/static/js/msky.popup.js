@@ -11,11 +11,12 @@
 
 
 
-;(function(window, $){
+;(function(window, $){ 
 	'use strict';
-	// 转数组
-	var slice = Array.prototype.slice;
 
+	// 转类数组
+	var slice = Array.prototype.slice;
+	
 	// 是否是函数
 	var isFunction = function(obj){
 		return Object.prototype.toString.call(obj) === '[object Function]';	
@@ -34,6 +35,7 @@
 		}else{
 			jq = $(selector, context);
 			if(jq.length === 0){
+				// 递归
 				jq = getJq(selector, window.document);
 			}
 		}
@@ -41,17 +43,15 @@
 		return jq;
 	};
 
+
 	// 构造器
 	function Popup(elem, options){  
 		var t = this;
 
-		t.opts = $.extend(true, {}, Popup.defaults, options || {});
+		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
 
 		t.$container = $(elem);
-
-		t.$btnTrigger = getJq(t.opts.btnTrigger);
-
-		// 关闭按钮是否是当前容器的子元素
+		t.$btnTrigger = $(t.opts.btnTrigger);
 		t.$btnClose  = getJq(t.opts.btnClose, t.$container);
 
 		t.$mask = $(Popup.mask);
@@ -70,8 +70,8 @@
 
 		// 显示按钮
 		t.$btnTrigger.on('click', function(){
-			// 触发按钮elem
-			var t.target = this;
+
+			t.target = this;
 
 			// 显示前
 			if(t.excuteStack(t.stackBeforeShow, t.target) === false){
@@ -100,7 +100,7 @@
 		});
 	};
 
-	// 添加遮罩
+	// 添加遮罩   只添加一次  需初始化好事件
 	Popup.prototype.appendMask = function(){
 		var t = this;
 
@@ -128,7 +128,7 @@
 				return;
 			}
 
-			// 始终隐藏当前的弹窗
+			// 隐藏
 			r.hide();
 
 			// 隐藏后
@@ -153,7 +153,7 @@
 	Popup.prototype.excuteStack = function(stack){
 		var t = this;
 		
-		// 将需要的参数，传递到栈中
+		// 将需要的参数,传递到栈中
 		var rest = slice.call(arguments).slice(1);
 		for (var i = 0; i < stack.length; i++) {
 			var value = stack[i].apply(t, rest);
@@ -218,6 +218,7 @@
 	};
 
 	// 显示
+	// 核心逻辑
 	Popup.prototype.show = function(){
 		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
 		// 来引用当前显示的弹窗
@@ -227,14 +228,22 @@
 			t.appendMask();
 		}
 
-		t.centred();
+		// 添加resize事件并执行
+		$(window).on('resize.Popup', function(){
+			t.centred();
+		}).trigger('resize.Popup');
+
 		t.$container.fadeIn(t.opts.speed);
 		t.$mask.fadeIn(t.opts.speed)
 	};
 
 	// 隐藏
+	// 核心逻辑
 	Popup.prototype.hide = function(){
 		var t = this;
+
+		// 移除resize事件
+		$(window).off('.Popup');
 
 		t.$container.fadeOut(t.opts.speed);
 		t.$mask.fadeOut(t.opts.speed);
@@ -250,25 +259,21 @@
 	// 遮罩层DOM
 	Popup.mask = document.createElement('div');
 
-	Popup.zIndex = 99999;
+	Popup.zIndex = 9999999;
 
 	// 默认参数
-	Popup.defaults = {
+	Popup.defaultOpts = {
 		// 打开按钮
 		btnTrigger: null,
 		// 关闭按钮
-		btnClose: '.popup-btn-close',		
+		btnClose: '.popup-btn-close',
 		// 动画时长
 		speed: 400,
 		// 遮罩层
 		mask:{
 			opacity: 0.7,
 			backgroundColor: '#000'
-		},
-		onBeforeShow: [],
-		onAfterShow: [],
-		onBeforeHide: [],
-		onAfterHide: []
+		}
 	};
 	
 
