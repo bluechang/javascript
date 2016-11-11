@@ -27,7 +27,7 @@
 		var jq = null;
 		context = context || window.document;
 
-		if(context === window.document){
+		if(context === window.document){    
 			jq = $(selector);
 			if(jq.length === 0){
 				throw new Error('$("' + selector + '") is not exist!!!');
@@ -36,7 +36,7 @@
 			jq = $(selector, context);
 			if(jq.length === 0){
 				// 递归
-				jq = getJq(selector, window.document);
+				jq = getJq(selector, window.document);    
 			}
 		}
 
@@ -48,7 +48,7 @@
 	function Popup(elem, options){  
 		var t = this;
 
-		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
+		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});  
 
 		t.$container = $(elem);
 		t.$btnTrigger = $(t.opts.btnTrigger);
