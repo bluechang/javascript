@@ -156,6 +156,38 @@
 		})
 	};
 
+	// 显示
+	// 核心逻辑
+	Popup.prototype.show = function(){
+		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
+		// 来引用当前显示的弹窗
+		var t = Popup.refer = this;
+
+		if(!Popup.hasMask){
+			t.appendMask();
+		}
+
+		// 添加resize事件并执行
+		$(window).on('resize.Popup', function(){
+			t.centred();
+		}).trigger('resize.Popup');
+
+		t.$container.fadeIn(t.opts.speed);
+		t.$mask.stop(true).fadeIn(t.opts.speed)
+	};
+
+	// 隐藏
+	// 核心逻辑
+	Popup.prototype.hide = function(){
+		var t = this;
+
+		// 移除resize事件
+		$(window).off('.Popup');
+
+		t.$container.fadeOut(t.opts.speed);
+		t.$mask.stop().fadeOut(t.opts.speed);
+	};
+
 	// 执行栈
 	Popup.prototype.excuteStack = function(stack){
 		var t = this;
@@ -222,38 +254,6 @@
 		if(isFunction(callback)){
 			t.stackAfterHide.push(callback);
 		}
-	};
-
-	// 显示
-	// 核心逻辑
-	Popup.prototype.show = function(){
-		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
-		// 来引用当前显示的弹窗
-		var t = Popup.refer = this;
-
-		if(!Popup.hasMask){
-			t.appendMask();
-		}
-
-		// 添加resize事件并执行
-		$(window).on('resize.Popup', function(){
-			t.centred();
-		}).trigger('resize.Popup');
-
-		t.$container.fadeIn(t.opts.speed);
-		t.$mask.fadeIn(t.opts.speed)
-	};
-
-	// 隐藏
-	// 核心逻辑
-	Popup.prototype.hide = function(){
-		var t = this;
-
-		// 移除resize事件
-		$(window).off('.Popup');
-
-		t.$container.fadeOut(t.opts.speed);
-		t.$mask.fadeOut(t.opts.speed);
 	};
 
  
