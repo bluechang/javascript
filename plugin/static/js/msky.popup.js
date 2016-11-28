@@ -27,7 +27,7 @@
 		var jq = null;
 		context = context || window.document;
 
-		if(context === window.document){
+		if(context === window.document){    
 			jq = $(selector);
 			if(jq.length === 0){
 				throw new Error('$("' + selector + '") is not exist!!!');
@@ -36,7 +36,7 @@
 			jq = $(selector, context);
 			if(jq.length === 0){
 				// 递归
-				jq = getJq(selector, window.document);
+				jq = getJq(selector, window.document);    
 			}
 		}
 
@@ -44,11 +44,53 @@
 	};
 
 
-	// 构造器
+	/**
+	 * [效果对象]
+	 * @param {[type]} popup [弹窗对象]
+	 */
+	function Effect(popup){
+		this.popup = popup;
+		this.opts = popup.opts;
+		this.$container = popup.$container;
+		this.$mask = popup.$mask;
+	}
+
+
+	/**
+	 * [淡入淡出效果]
+	 * @param {[type]} popup [弹窗对象]
+	 */
+	function Fade(popup){
+		// 继承
+		Effect.call(this, popup);
+	}
+
+	// 显示
+	Fade.prototype.show = function(){
+		var t = this;
+
+		t.$container.fadeIn(t.opts.speed);
+		t.$mask.stop(true).fadeIn(t.opts.speed);
+	}
+
+	// 隐藏
+	Fade.prototype.hide = function(){
+		var t = this;
+
+		t.$container.fadeOut(t.opts.speed);
+		t.$mask.stop().fadeOut(t.opts.speed);
+	}
+
+
+	/**
+	 * [弹窗构造器]
+	 * @param {[type]} elem    [元素节点]
+	 * @param {[type]} options [可选参数]
+	 */
 	function Popup(elem, options){  
 		var t = this;
 
-		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});
+		t.opts = $.extend(true, {}, Popup.defaultOpts, options || {});  
 
 		t.$container = $(elem);
 		t.$btnTrigger = $(t.opts.btnTrigger);
@@ -61,8 +103,23 @@
 		t.onBeforeHide(t.opts.onBeforeHide);
 		t.onAfterHide(t.opts.onAfterHide);
 
-		t.initEvents();
+		t.initialize();
 	};
+
+	Popup.prototype.initialize = function(){
+		var t = this;
+
+		// 显示效果
+		switch(t.opts.effect){
+			case 'fade': 
+				t.effect = new Fade(t);
+				break;
+			default: 
+				t.effect = new Fade(t);
+		}
+
+		t.initEvents();
+	}
 
 	// 初始化事件
 	Popup.prototype.initEvents = function(){ 
@@ -98,6 +155,36 @@
 			// 隐藏后
 			t.excuteStack(t.stackAfterHide, t.target);
 		});
+	};
+
+	// 显示
+	Popup.prototype.show = function(){
+		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
+		// 来引用当前显示的弹窗
+		var t = Popup.refer = this;
+
+		if(!Popup.hasMask){
+			t.appendMask();
+		}
+
+		// 添加resize事件并执行
+		$(window).on('resize.Popup', function(){
+			t.centred();
+		}).trigger('resize.Popup');
+
+		// 显示
+		t.effect.show();
+	};
+
+	// 隐藏
+	Popup.prototype.hide = function(){
+		var t = this;
+
+		// 移除resize事件
+		$(window).off('.Popup');
+
+		// 隐藏
+		t.effect.hide();
 	};
 
 	// 添加遮罩   只添加一次  需初始化好事件
@@ -217,38 +304,6 @@
 		}
 	};
 
-	// 显示
-	// 核心逻辑
-	Popup.prototype.show = function(){
-		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
-		// 来引用当前显示的弹窗
-		var t = Popup.refer = this;
-
-		if(!Popup.hasMask){
-			t.appendMask();
-		}
-
-		// 添加resize事件并执行
-		$(window).on('resize.Popup', function(){
-			t.centred();
-		}).trigger('resize.Popup');
-
-		t.$container.fadeIn(t.opts.speed);
-		t.$mask.fadeIn(t.opts.speed)
-	};
-
-	// 隐藏
-	// 核心逻辑
-	Popup.prototype.hide = function(){
-		var t = this;
-
-		// 移除resize事件
-		$(window).off('.Popup');
-
-		t.$container.fadeOut(t.opts.speed);
-		t.$mask.fadeOut(t.opts.speed);
-	};
-
  
 	// 显示哪个弹窗
 	Popup.refer = null;
@@ -263,21 +318,36 @@
 
 	// 默认参数
 	Popup.defaultOpts = {
+		// 显示效果
+		effect: 'fade',
 		// 打开按钮
 		btnTrigger: null,
 		// 关闭按钮
-		btnClose: '.popup-btn-close',
+		btnClose: null,
 		// 动画时长
 		speed: 400,
 		// 遮罩层
 		mask:{
 			opacity: 0.7,
 			backgroundColor: '#000'
-		}
+		},
+		// 显示前
+		onBeforeShow: null,
+		// 显示后
+		onAfterShow: null,
+		// 隐藏前
+		onBeforeHide: null,
+		// 隐藏后
+		onAfterHide: null
 	};
 	
 
-	// 挂载到jQuery原型上
+
+	/**
+	 * 挂载到jQuery原型上
+	 * @param  {[type]} options [可选参数]
+	 * @return {[type]}         [弹窗对象]
+	 */
 	$.fn.skyPopup = function(options){ 
 		// 只实例化第一个并返回
 		if(this.length === 0){
