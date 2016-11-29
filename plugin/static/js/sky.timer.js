@@ -12,6 +12,7 @@
 		return Object.prototype.toString.call(obj) === '[object Function]';
 	}
 
+
 	/**
 	 * 构造器
 	 * @param {[type]} elem    [元素节点]
@@ -43,6 +44,7 @@
 
 		t.onBeforeStart(t.opts.onBeforeStart);
 		t.onAfterStart(t.opts.onAfterStart);
+		t.onAfterEnd(t.opts.onAfterEnd);
 
 		t.initEvents();
 	}
@@ -103,6 +105,9 @@
 			// 取消定时器
 			window.clearInterval(t.timer);
 
+			// 执行结束后的回调
+			t.excuteStack(t.stackAfterEnd);
+
 			return;
 		}
 
@@ -145,6 +150,19 @@
 
 		if(isFunction(callback)){
 			t.stackAfterStart.push(callback);
+		}
+	}
+
+	// 结束之后
+	Timer.prototype.onAfterEnd = function(callback){
+		var t = this;
+
+		if(!t.stackAfterEnd){
+			t.stackAfterEnd = [];
+		}
+
+		if(isFunction(callback)){
+			t.stackAfterEnd.push(callback);
 		}
 	}
 
