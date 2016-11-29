@@ -7,16 +7,22 @@
 
 ;(function(window, $){
 
+	// 是否是函数
 	var isFunction = function(obj){
 		return Object.prototype.toString.call(obj) === '[object Function]';
 	}
 
-	// 构造器
+	/**
+	 * 构造器
+	 * @param {[type]} elem    [元素节点]
+	 * @param {[type]} options [参数]
+	 */
 	function Timer(elem, options){
 		var t = this;
 
 		t.opts = $.extend(true, {}, Timer.defaultOpts, options || {});
 
+		// 容器
 		t.$container = $(elem);
 		// 是否完成
 		t.isDone = true;
@@ -61,7 +67,7 @@
 	Timer.prototype.start = function(){
 		var t = this;
 
-		// 未结束之前，直接返回
+		// 未结束之前，直接返回, 不继续向下执行
 		if(!t.isDone){
 			return;
 		}
@@ -84,7 +90,7 @@
 		window.clearInterval(t.timer);
 	}
 
-	// tick - 每执行一次
+	// tick
 	Timer.prototype.tick = function(){
 		var t = this;
 
