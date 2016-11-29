@@ -159,6 +159,11 @@
 
 	// 显示
 	Popup.prototype.show = function(){
+		// 先隐藏前一个,一次只显示一个弹窗
+		if(Popup.refer){
+			Popup.refer.hide(); 
+		}
+
 		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
 		// 来引用当前显示的弹窗
 		var t = Popup.refer = this;
@@ -167,7 +172,7 @@
 			t.appendMask();
 		}
 
-		// 添加resize事件并执行
+		// 显示的时候，添加resize事件并执行
 		$(window).on('resize.Popup', function(){
 			t.centred();
 		}).trigger('resize.Popup');
