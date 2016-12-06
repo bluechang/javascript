@@ -170,11 +170,11 @@
 
 			e = e.originalEvent;
 			delta = e.deltaY || -e.wheelDelta || e.detail;	
-			delta === 0 ? 
+			delta === 0 ?  
 						k = 0 : 
 						k = delta > 0 ? 1 : -1; 
 
-			t.scrollVal = t.panelElem[t.scrollPosProp] + k*t.opts.speed;		
+			t.scrollVal = t.panelElem[t.scrollPosProp] + k*t.opts.speed; 	   	
 			t.updateLayout();
 		});
 
