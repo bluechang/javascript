@@ -4,7 +4,7 @@
  * 
  * 
  * @author: blue chang
- * @time: 2016-12-06
+ * @time: 2016-09-25
  * 
  */
 
@@ -91,7 +91,7 @@
 		}
 
 		if(t.opts.listTag === 'ul'){
-			t.$list.on('click', 'li', function(){		
+			t.$list.on('click', 'li', function(){  
 				fn.call(this);
 			})
 		}else{
@@ -103,46 +103,42 @@
 	}
 
 	// 滚轮事件
-	Select.prototype.listScrollEvent = function(event){
+	Select.prototype.listScrollEvent = function(){
 		var t = this;
+		
+		var k, delta;
+		var startY = 0, endY = 0;							
 
-		// 系数、滚动值	、当前值
-		var k, delta, curr;									
-		var wheelEvent = 'wheel mousewheel DOMMouseScroll';
-		var docWheelEvent = 'wheel.DocWheel mousewheel.DocWheel DOMMouseScroll.DocWheel'; 
+		t.$listWrap.on('touchstart mousedown', function(e){   
 
-		// 滑轮事件
-		t.$listWrap.on(wheelEvent, function(e){    
+			startY = e.touches[0].clientY || e.clientY;		 
 
-			e = e.originalEvent;
-			delta = e.deltaY || -e.wheelDelta || e.detail;   
-			delta === 0 ?  
-						k = 0 : 
-						k = delta > 0 ? 1 : -1;
+			// 滑动事件
+			$doc.on('touchmove.Select mousemove.Select', function(e){  
 
-			curr = t.$listWrap.scrollTop();
+				endY = e.touches[0].clientY || e.clientY;                
+				delta = endY - startY;
+				delta >= 0 ? k = -1 : k = 1; 
 
-			t.$listWrap.scrollTop(curr + k*t.opts.speed);
+				t.listWrapElem.scrollTop += k*t.opts.speed;
 
-		})	
-
-		// 滚动时禁止浏览器滚动
-		t.$listWrap.hover(function(){
-			$doc.on(docWheelEvent, function(){
+				// 阻止默认行为
 				return false;
+			})	
+
+			$doc.on('touchend.Select mouseup.Select', function(){
+				$doc.off('.Select');
 			})
-		}, function(){
-			$doc.off('.DocWheel');
-		});
+		})
 	}
 
 	// 文档点击事件
 	Select.prototype.docClickEvent = function(){
 		var t = this;
 
-		var flag;
+		var flag = false;
 
-		$doc.on('click.Select', function(e){  			
+		$doc.on('click', function(e){  			
 			flag = !!t.$container.has(e.target).length;  
 
 			if(!flag){
@@ -160,7 +156,7 @@
 		// 列表标签
 		listTag: 'ul',
 		// 滚动速度
-		speed: 20,
+		speed: 5
 	};
 	
 
