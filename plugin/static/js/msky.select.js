@@ -111,7 +111,7 @@
 
 		t.$listWrap.on('touchstart mousedown', function(e){   
 
-			startY = e.touches[0].clientY || e.clientY;		 
+			startY = (e.touches && e.touches[0].clientY) || e.clientY;		 
 
 			// 滑动事件
 			$doc.on('touchmove.Select mousemove.Select', function(e){  
