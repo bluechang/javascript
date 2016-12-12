@@ -78,7 +78,7 @@
 		var t = this;
 
 		t.$container.fadeOut(t.opts.speed);
-		t.$mask.stop().fadeOut(t.opts.speed);
+		t.$mask.stop(true).fadeOut(t.opts.speed);
 	}
 
 
