@@ -29,9 +29,6 @@
 
 		if(context === window.document){    
 			jq = $(selector);
-			if(jq.length === 0){
-				throw new Error('$("' + selector + '") is not exist!!!');
-			}
 		}else{
 			jq = $(selector, context);
 			if(jq.length === 0){

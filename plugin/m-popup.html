@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>popup</title>
+	<title>m-popup</title>
 	<link rel="stylesheet" href="static/css/reset.css">
 	<style type="text/css">
 		.popup{
@@ -82,11 +82,24 @@
 			});
 
 			// pop3
-			$('.popup3').skyPopup({
+			var pop3 = $('.popup3').skyPopup({
 				btnTrigger: '.trigger3',
 				btnClose: '.popup-btn-close',
-				speed: 300
+				speed: 300,
+				onBeforeShow: function(){  
+					console.log('onBeforeShow');
+				},
+				onAfterShow: function(){
+					console.log('onAfterShow');
+				},
+				onBeforeHide: function(){
+					console.log('onBeforeHide');
+				},
+				onAfterHide: function(){
+					console.log('onAfterHide');
+				}
 			});
+
 		})
 	</script>
 

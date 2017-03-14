@@ -20,7 +20,7 @@
 	// 是否是函数
 	var isFunction = function(obj){
 		return Object.prototype.toString.call(obj) === '[object Function]';	
-	}
+	};
 
 	// 获取jQuery对象
 	var getJq = function(selector, context){
@@ -29,9 +29,6 @@
 
 		if(context === window.document){    
 			jq = $(selector);
-			if(jq.length === 0){
-				throw new Error('$("' + selector + '") is not exist!!!');
-			}
 		}else{
 			jq = $(selector, context);
 			if(jq.length === 0){
@@ -122,11 +119,11 @@
 	}
 
 	// 初始化事件
-	Popup.prototype.initEvents = function(){ 
+	Popup.prototype.initEvents = function(){    
 		var t = this;
 
 		// 显示按钮
-		t.$btnTrigger.on('click', function(){
+		t.$btnTrigger.on('click', function(){   
 
 			t.target = this;
 
@@ -136,24 +133,24 @@
 			}
 
 			// 显示
-			t.show();
-
-			// 显示后
-			t.excuteStack(t.stackAfterShow, t.target);
+			t.show(function(){
+				// 显示后
+				t.excuteStack(t.stackAfterShow, t.target);
+			});
 		});
 
 		// 关闭按钮
-		t.$btnClose.on('click', function(){
+		t.$btnClose.on('click', function(){		
 			// 隐藏前
 			if(t.excuteStack(t.stackBeforeHide, t.target) === false){
 				return;
 			}
 			
 			// 隐藏
-			t.hide();
-
-			// 隐藏后
-			t.excuteStack(t.stackAfterHide, t.target);
+			t.hide(function(){
+				// 隐藏后
+				t.excuteStack(t.stackAfterHide, t.target);
+			});
 		});
 	};
 
@@ -171,11 +168,6 @@
 		if(!Popup.hasMask){
 			t.appendMask();
 		}
-
-		// 显示的时候，添加resize事件并执行
-		$(window).on('resize.Popup', function(){
-			t.centred();
-		}).trigger('resize.Popup');
 
 		// 显示
 		t.effect.show();
@@ -198,18 +190,7 @@
 
 		Popup.hasMask = true;
 
-		$('body').append(t.$mask);
-
-		t.$mask.css({
-			backgroundColor: t.opts.mask.backgroundColor,
-			opacity: t.opts.mask.opacity,
-			position: 'fixed',
-			left: 0,
-			right: 0,
-			top: 0,
-			bottom: 0,
-			zIndex: Popup.zIndex - 1
-		});
+		t.$mask.addClass( t.opts.mask ).appendTo('body');
 
 		t.$mask.on('click', function(){
 			//遮罩只添加一次，永远指向当前显示的弹窗
@@ -221,24 +202,11 @@
 			}
 
 			// 隐藏
-			r.hide();
-
-			// 隐藏后
-			r.excuteStack(r.stackAfterHide, r.target);
+			r.hide(function(){
+				// 隐藏后
+				r.excuteStack(r.stackAfterHide, r.target);
+			});
 		});
-	};
-
-	// 居中
-	Popup.prototype.centred = function(){
-		var t = this;
-
-		t.$container.css({
-			position: 'fixed',
-			left: '50%',
-			top: '50%',
-			zIndex: Popup.zIndex,
-			transform: 'translate3d(-50%, -50%, 0)'
-		})
 	};
 
 	// 执行栈
@@ -316,10 +284,8 @@
 	// 是否有遮罩层
 	Popup.hasMask = false;
 
-	// 遮罩层DOM
+	// 遮罩层 DOM
 	Popup.mask = document.createElement('div');
-
-	Popup.zIndex = 9999999;
 
 	// 默认参数
 	Popup.defaultOpts = {
@@ -330,12 +296,9 @@
 		// 关闭按钮
 		btnClose: null,
 		// 动画时长
-		speed: 400,
+		speed: 300,
 		// 遮罩层
-		mask:{
-			opacity: 0.7,
-			backgroundColor: '#000'
-		},
+		mask: 'popup-mask',
 		// 显示前
 		onBeforeShow: null,
 		// 显示后
@@ -359,7 +322,7 @@
 			throw new Error('The elem is not exist!!!');
 		}
 
-		return new Popup(this[0], options);
+		return new Popup( this[0], options );
 	}
 
 })(window, jQuery);
