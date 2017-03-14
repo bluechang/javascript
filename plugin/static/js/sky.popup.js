@@ -116,9 +116,9 @@
 	};
 
 	// 显示
-	Popup.prototype.show = function(){
+	Popup.prototype.show = function(){   
 		// 先隐藏前一个,一次只显示一个弹窗
-		if( Popup.refer && Popup.refer.length ){
+		if( Popup.refer && Popup.refer.hide ){ 
 			Popup.refer.hide(); 
 		}
 
