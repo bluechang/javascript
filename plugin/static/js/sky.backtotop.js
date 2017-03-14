@@ -13,11 +13,13 @@
 
 	var $win = $(window);
 	
-	// 构造器
+	/**
+	 * 构造器函数
+	 */
 	function BackToTop(elem, options){
 		var t = this;
 
-		t.opts = $.extend(true, {}, BackToTop.defaultOpts, options || {}); 
+		t.opts = $.extend( {}, BackToTop.defaultOpts, options || {} ); 
 
 		t.$btn = $(elem);
 
@@ -28,9 +30,9 @@
 		var t = this;
 
 		t.isAnimate = false;
-		t.max = t.opts.max || $win.height() / 3;		
+		t.max = $win.height() * ( t.opts.k || 1);		
 
-		if(!t.opts.isAuto){  
+		if( !t.opts.isAuto ){  
 			t.$btn.show();
 		}
 
@@ -41,11 +43,13 @@
 	BackToTop.prototype.initEvents = function(){
 		var t = this;
 
-		t.$btn.on(t.opts.eventType, function(){
-			t.play();
+		t.$btn.on(t.opts.event, function(){
+			t.start();
 		})
 	
-		if(!t.opts.isAuto) return;
+		if( !t.opts.isAuto ) {
+			return;
+		}
 	
 		$win.on('scroll', function(){   
 			t.scroll();
@@ -58,25 +62,21 @@
 
 		var scrollTop = $win.scrollTop();
 
-		if(scrollTop >= t.max){  
-			t.$btn.fadeIn();
-		}else{
-			t.$btn.fadeOut();
-		}
+		scrollTop >= t.max ? t.$btn.fadeIn() : t.$btn.fadeOut();
 	}
 
 	// 开始
-	BackToTop.prototype.play = function(){
+	BackToTop.prototype.start = function(){
 		var t = this;
 
-		var wheelName = 'wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop';
+		var event = 'wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop';
 
 		// 运动期间 禁用滚轮
-		$win.on(wheelName, function(e){   
+		$win.on(event, function(e){   
 			return false;
 		});
 
-		t.timer = setInterval(function(){
+		t.timer = window.setInterval(function(){
 			t.tick();
 		}, t.opts.time);
 	}
@@ -85,7 +85,7 @@
 	BackToTop.prototype.stop = function(){
 		var t = this;
 
-		window.clearInterval(t.timer);
+		window.clearInterval( t.timer );
 	}
 
 	// tick  
@@ -97,36 +97,36 @@
 		// 速度
 		var speed = scrollTop / t.opts.speed;
 
-		if(scrollTop === 0){  
-			// 恢复滚轮
+		if( scrollTop === 0 ){  
+			// 恢复禁用滚轮
 			$win.off('.BackToTop');
 			
 			t.stop();
 		}else{
-			// 实现滚动
+			// 滚动
 			$win.scrollTop(scrollTop - speed);
 		}
 	}
 
 	// 默认参数
 	BackToTop.defaultOpts = {
-		eventType: 'click',
+		event: 'click',
 		isAuto: true,			//是否自动显隐
 		speed: 4,				//移动速度,越大速度越慢
-		max: null,				//显隐临界点
+		k: 1,					//系数，屏幕高的倍数
 		time: 30				//定时器执行速度
 	};
 	
 
 	// 挂载到jQuery原型上
 	$.fn.skyBackToTop = function(options){ 
-		// 只实例化第一个并返回
-		if(this.length === 0){
-			throw new Error('The elem is not exist!!!');
+		if( this.length === 0 ){
+			var msg = this.selector || 'backtotop';
+			throw new Error( '\'' + msg + '\'' + ' is not exist！！！');
 		}
 
 		// 只实例化第一个并返回
-		return new BackToTop(this[0], options);
+		return new BackToTop( this[0], options );
 	}
 
 })(window, jQuery);

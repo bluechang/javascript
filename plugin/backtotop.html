@@ -18,7 +18,7 @@
 			display: none;
 			width: 50px;
 			height: 50px;
-			margin-left: 520px;
+			margin-left: 400px;
 			background: url(static/images/back-to-top.png) no-repeat;
 			cursor: pointer;
 			position: fixed;
@@ -32,7 +32,7 @@
 	<div class="panel"></div>
 	<div class="back-to-top"></div>
 
-	<script type="text/javascript" src="static/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="static/lib/jquery.js"></script>
 	<script type="text/javascript" src="static/js/sky.backtotop.js"></script>
 	<script type="text/javascript">
 
@@ -52,13 +52,12 @@
 
 		generate('.panel', 400);
 		
+		$('.back-to-top').skyBackToTop({
+			isAuto: false,					//是否自动显隐
+			speed: 2						//越大速度越慢
+		});
 
-		$(document).ready(function(){
-			$('.back-to-top').skyBackToTop({
-				isAuto: true,					//是否自动显隐
-				speed: 2						//越大速度越慢
-			});
-		})
+		$('body, html').animate({scrollTop: 0}, 600);
 	</script>
 
 </body>
