@@ -1,23 +1,8 @@
 
 
-const gulp 			= 	require('gulp');
-const gulpSequence 	= 	require('gulp-sequence');
-const browserSync   =	require('browser-sync').create();
-
-const paths = {
-	html: {
-		src: ['*.html']
-	},
-	css: {
-		src: ['static/css/**']
-	},
-	js: {
-		src: ['static/js/**']
-	},
-	img: {
-		src: ['static/images/**']
-	}
-};
+const gulp 				= 	require('gulp');
+const gulpLoadPlugins 	= 	require('gulp-load-plugins');
+const browserSync   	=	require('browser-sync').create();
 
 
 gulp.task('server', ()=>{
