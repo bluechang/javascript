@@ -48,15 +48,19 @@
 		var t = popup;
 		return {
 			show: function( cb ){
+				t.onAfterShow( cb );
+
 				t.$container.fadeIn( t.opts.duration);
 				t.$mask.stop( true ).fadeIn( t.opts.duration , function(){
-					cb && cb();
+					t.excuteStack( t.stackAfterShow );
 				});
 			},
 			hide: function( cb ){
+				t.onAfterHide( cb );
+
 				t.$container.fadeOut( t.opts.duration );
 				t.$mask.stop( true ).fadeOut( t.opts.duration , function(){
-					cb && cb();
+					t.excuteStack( t.stackAfterHide );
 				});
 			}
 		}
@@ -116,7 +120,7 @@
 	};
 
 	// 显示
-	Popup.prototype.show = function(){   
+	Popup.prototype.show = function( callback ){   
 		// 先隐藏前一个,一次只显示一个弹窗
 		if( Popup.refer && Popup.refer.hide ){ 
 			Popup.refer.hide(); 
@@ -131,20 +135,17 @@
 		}
 
 		// 显示前
-		if(t.excuteStack( t.stackBeforeShow ) === false){
+		if( t.excuteStack( t.stackBeforeShow ) === false ){
 			return;
 		}
 
 		// 显示
-		t.effect.show(function(){
-			// 显示后
-			t.excuteStack( t.stackAfterShow );
-		});
+		t.effect.show( callback );
 		
 	};
 
 	// 隐藏
-	Popup.prototype.hide = function(){
+	Popup.prototype.hide = function( callback ){
 		var t = this;
 
 		// 隐藏前
@@ -153,10 +154,7 @@
 		}
 
 		// 隐藏
-		t.effect.hide(function(){
-			// 隐藏后
-			t.excuteStack( t.stackAfterHide );
-		})
+		t.effect.hide( callback )
 	};
 
 	// 添加遮罩 
@@ -276,9 +274,8 @@
 	
 
 
-	/**
-	 * 挂载到 jQuery 原型上
-	 */
+	
+	// 挂载到 jQuery 原型上
 	$.fn.skyPopup = function( options ){
 		if( this.length === 0 ){
 			var msg = this.selector || 'popup';

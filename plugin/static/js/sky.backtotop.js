@@ -11,7 +11,9 @@
 ;(function(window, $){
 	'use strict';
 
-	var $win = $(window);
+	var $win = $(window),
+		// firfox不支持 body.scorllTop
+		$bodyHtml = $('body, html');
 	
 	/**
 	 * 构造器函数
@@ -47,13 +49,15 @@
 			t.start();
 		})
 	
-		if( !t.opts.isAuto ) {
-			return;
+		if( t.opts.isAuto ) {
+			$win.on('scroll.BackToTop', function(){   
+				t.scroll();
+			}).trigger('scroll.BackToTop');
 		}
 	
-		$win.on('scroll', function(){   
-			t.scroll();
-		}).trigger('scroll');
+		$win.on('resize.BackToTop', function(){
+			t.max = $win.height() * ( t.opts.k || 1 );
+		})
 	}
 
 	// 滚动
@@ -71,54 +75,46 @@
 
 		var event = 'wheel.BackToTop mousewheel.BackToTop DOMMouseScroll.BackToTop';
 
+		if( t.isAnimate === true ){
+			return;
+		}
+
+		t.isAnimate = true;
+
 		// 运动期间 禁用滚轮
-		$win.on(event, function(e){   
+		$win.on(event, function(){   
 			return false;
 		});
 
-		t.timer = window.setInterval(function(){
-			t.tick();
-		}, t.opts.time);
-	}
-
-	// 停止
-	BackToTop.prototype.stop = function(){
-		var t = this;
-
-		window.clearInterval( t.timer );
-	}
-
-	// tick  
-	// 核心算法和逻辑
-	BackToTop.prototype.tick = function(){
-		var t = this;
-
-		var scrollTop = $win.scrollTop();
-		// 速度
-		var speed = scrollTop / t.opts.speed;
-
-		if( scrollTop === 0 ){  
-			// 恢复禁用滚轮
-			$win.off('.BackToTop');
-			
-			t.stop();
-		}else{
-			// 滚动
-			$win.scrollTop(scrollTop - speed);
-		}
+		// 动画
+		$bodyHtml.animate({scrollTop: 0}, {
+			easing: t.opts.easing,
+			duration: t.opts.duration,
+			step: function(now, fx){
+				console.log(now);
+			},
+			complete: function(){
+				t.isAnimate = false;
+				$win.off( event );
+			}
+		});
 	}
 
 	// 默认参数
 	BackToTop.defaultOpts = {
 		event: 'click',
-		isAuto: true,			//是否自动显隐
-		speed: 4,				//移动速度,越大速度越慢
-		k: 1,					//系数，屏幕高的倍数
-		time: 30				//定时器执行速度
+		// 移动速度,越大速度越慢
+		isAuto: true,		
+		// 系数，屏幕高的倍数		
+		k: 1,	
+		// 运动时间					
+		duration: 800,
+		// 运动效果，复杂的运动需要插件				
+		easing: 'swing'
 	};
 	
 
-	// 挂载到jQuery原型上
+	// 挂载到 jQuery 原型上
 	$.fn.skyBackToTop = function(options){ 
 		if( this.length === 0 ){
 			var msg = this.selector || 'backtotop';

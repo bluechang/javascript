@@ -51,13 +51,14 @@
 		};
 
 		generate('.panel', 400);
+
 		
 		$('.back-to-top').skyBackToTop({
-			isAuto: false,					//是否自动显隐
-			speed: 2						//越大速度越慢
+			//是否自动显隐,
+			isAuto: true,					
+			duration: 800
 		});
 
-		$('body, html').animate({scrollTop: 0}, 600);
 	</script>
 
 </body>
