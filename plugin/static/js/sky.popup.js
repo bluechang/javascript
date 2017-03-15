@@ -6,6 +6,7 @@
  * 
  * @author: blue chang
  * @time: 2017-03-14
+ * @update: 2017-03-15
  * 
  */
 
@@ -22,7 +23,7 @@
 		return typeof obj === 'function';	
 	}
 
-	// 获取jQuery对象
+	// 获取 jQuery 对象
 	function getJq( selector, context ){
 		var jq = null;
 		context = context || window.document;
@@ -69,7 +70,7 @@
 
 
 	/**
-	 * 弹窗构造器
+	 * 构造器
 	 */
 	function Popup(elem, options){  
 		var t = this;
@@ -81,6 +82,8 @@
 		t.$btnClose  = getJq( t.opts.btnClose, t.$container );
 
 		t.$mask = Popup.mask;
+
+		t.isVisible = false;
 
 		t.onBeforeShow( t.opts.onBeforeShow );
 		t.onAfterShow( t.opts.onAfterShow );
@@ -122,13 +125,15 @@
 	// 显示
 	Popup.prototype.show = function( callback ){   
 		// 先隐藏前一个,一次只显示一个弹窗
-		if( Popup.refer && Popup.refer.hide ){ 
+		if( Popup.refer && Popup.refer.isVisible ){ 
 			Popup.refer.hide(); 
 		}
 
 		// 遮罩只添加一次，用挂载到构造函数上的静态变量refer，
 		// 来引用当前显示的弹窗
 		var t = Popup.refer = this;
+
+		t.isVisible = true;
 
 		if( !Popup.hasMask ){
 			t.appendMask();
@@ -142,11 +147,14 @@
 		// 显示
 		t.effect.show( callback );
 		
+		return this;
 	};
 
 	// 隐藏
 	Popup.prototype.hide = function( callback ){
 		var t = this;
+
+		t.isVisible = false;
 
 		// 隐藏前
 		if( t.excuteStack(t.stackBeforeHide) === false ){
@@ -154,7 +162,9 @@
 		}
 
 		// 隐藏
-		t.effect.hide( callback )
+		t.effect.hide( callback );
+
+		return this;
 	};
 
 	// 添加遮罩 
@@ -199,6 +209,8 @@
 		if( isFunction( callback ) ){
 			t.stackBeforeShow.push( callback );
 		}
+
+		return this;
 	};
 
 	// 显示后
@@ -212,6 +224,8 @@
 		if( isFunction(callback) ){
 			t.stackAfterShow.push( callback );
 		}
+
+		return this;
 	};
 
 	// 隐藏前
@@ -225,6 +239,8 @@
 		if( isFunction(callback) ){
 			t.stackBeforeHide.push( callback );
 		}
+
+		return this;
 	};
 
 	// 隐藏后
@@ -238,6 +254,8 @@
 		if( isFunction(callback) ){
 			t.stackAfterHide.push( callback );
 		}
+
+		return this;
 	};
 
  

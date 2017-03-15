@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>lottery</title>
+	<link rel="stylesheet" href="static/css/reset.css">
+	<style type="text/css">
+		html{
+			background-color: #000;
+		}
+
+
+		.lottery-wrap{
+			width: 640px;
+			height: 605px;
+			margin: 0 auto;
+			background: url(static/images/lottery-bg.png) no-repeat center center;
+			background-size: 100% 100%;
+			position: relative;
+		}
+		.lottery-prize{
+			width: 428px;
+			height: 428px;
+			background: url(static/images/lottery-prize.png) no-repeat center center;
+			background-size: 100% 100%;
+			position: absolute;
+			left: 100px;
+			top: 80px;
+		}
+		.lottery-btn{
+			width: 133px;
+			height: 133px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate3d(-50%, -50%, 0);
+		}
+		.lottery-btn-arrow{
+			width: 100%;
+			height: 100%;
+			position: relative;
+			
+		}
+		.lottery-btn-arrow:after{
+			content: "";
+			width: 145px;
+			height: 208px;
+			background: url(static/images/lottery-btn-arrow.png) no-repeat center center;
+			background-size: 100% 100%;
+			position: absolute;
+			left: 50%;
+			bottom: 0;
+			transform: translate3d(-50%, 5%, 0);
+		};
+		.lottery-btn-start{
+			width: 101%;
+			height: 101%;
+			background: url(static/images/lottery-btn-txt.png) no-repeat center center;
+			background-size: 100% 100%;
+			position: absolute;
+			left: 0;
+			bottom: 0;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="lottery-wrap">
+		<div class="lottery-prize"></div>
+		<div class="lottery-btn">
+			<div class="lottery-btn-arrow"></div>
+			<div class="lottery-btn-txt"></div>   
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="static/lib/jquery.js"></script>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>

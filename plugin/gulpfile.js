@@ -1,14 +1,15 @@
 
 
 const gulp 				= 	require('gulp');
-const gulpLoadPlugins 	= 	require('gulp-load-plugins');
+const runSequence		=	require('run-sequence');
 const browserSync   	=	require('browser-sync').create();
+const $ 			 	= 	require('gulp-load-plugins');
 
 
 gulp.task('server', ()=>{
 	browserSync.init({
 		notify: false,
-		port: 3000,
+		port: 7000,
 		server: {
 			baseDir: './'
 		}
@@ -16,23 +17,23 @@ gulp.task('server', ()=>{
 });
 
 gulp.task('html', ()=>{
-	gulp.watch(paths.html.src, browserSync.reload);
+	gulp.watch( '*.html', browserSync.reload );
 });
 
-gulp.task('css', ()=>{
-	gulp.watch(paths.css.src, browserSync.reload);
+gulp.task('styles', ()=>{
+	gulp.watch( 'static/css/**/*', browserSync.reload );
 });
 
-gulp.task('js', ()=>{
-	gulp.watch(paths.js.src, browserSync.reload);
+gulp.task('scripts', ()=>{
+	gulp.watch( 'static/js/**/*', browserSync.reload );
 });
 
-gulp.task('img', ()=>{
-	gulp.watch(paths.img.src, browserSync.reload);
+gulp.task('images', ()=>{
+	gulp.watch( 'static/images/**/*', browserSync.reload );
 });
 
-gulp.task('build', (cb)=>{
-	gulpSequence(['html', 'css', 'js', 'img'], 'server')(cb);
+gulp.task('build', ( cb )=>{
+	runSequence( ['html', 'styles', 'scripts', 'images'], 'server', cb);
 });
 
 
