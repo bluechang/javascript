@@ -1,21 +1,30 @@
 
-
 // 设置 rem
-;(function(isWidth, designWidth){
-	var docElem = document.documentElement, 
-		clientWidth, callback,
-		baseWidth = 100;
-
-	if( typeof isWidth === 'number' || arguments.length === 0 ){
-		designWidth = designWidth || 640;
-		isWidth = true;
+;(function(w, h, m){
+	var docElem = document.documentElement,
+		base = 100, design, client, callback;
+	if( typeof w === 'number' && h === false ){
+		design = w;
 	}
-		
+	if( w === false && typeof h === 'number' ){
+		design = h;
+	}
 	callback = function(){
-		clientWidth = isWidth ? docElem.clientWidth : docElem.clientHeight;
-		docElem.style.fontSize = (baseWidth / designWidth) * clientWidth + 'px';
+		client = docElem[w ? 'clientWidth': 'clientHeight'];
+		if( w && (m || !m && (m = w)) && (client > m) ){
+			client = m;
+		}
+		docElem.style.fontSize = (base / design) * client + 'px';
 	};
-
-	window.addEventListener('resize', callback, false);
 	callback();
-})();
+	window.addEventListener('resize', callback, false);
+})(960, false);
+
+
+/**
+ * width: number | false
+ * height: number | false
+ * max: <number>
+ * 
+ */
+
