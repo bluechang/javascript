@@ -14,46 +14,94 @@
 // slotMachine
 ;var Z = (function($){
 
-    // 锁屏
-    function lockHandler( event ){
-        event.preventDefault();
-    };
-    function lockScreen( islock ){   
-        window[ islock ? 'addEventListener' : 'removeEventListener' ]('touchmove', lockHandler, { passive: false });
-    };
-
-
     // 初始化
     function slot( options ){
         var defaultOps = {
             BaseURL: '',
             event: 'click',
-            btnStart: null,
-            btnOn: null,
-            btnOff: null,
             target: null,
+            chance: null,
+            btnStart: null,
+            btnStartOn: null,
+            btnStartOff: null,
             defaultIndex: 1,
             numOfPrize: 4,
+            onInit: null,
             cycle: 80,
             duration: 5000,
-            interval: 400,
-            onStart: null
+            interval: 200
         };
 
         var opts = $.extend( {}, defaultOps, options || {} );
         var $btnStart = $(opts.btnStart),
+            $hand = $btnStart.find('img'),
             $target = $(opts.target),
+            $chance = $(opts.chance),
             $items = $target.children(),
             itemSize = $items.size(),
             itemHeight = $items.height() / opts.numOfPrize,
+            rnum = /\d/i,
             isBegin = false;
 
+        // defaultIndex
         if( opts.defaultIndex > opts.numOfPrize || opts.defaultIndex < 0 ){
             alert('The default index is error!');
             return;
+        } 
+
+        // 初始化
+        slot.init = function(){
+            slot.lockBtnStart(true);
+            $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
+        };
+
+        // 获取剩余机会
+        slot.getChance = function(){
+            var classname = $chance.attr('class'),
+                n = parseInt( rnum.exec(classname)[0] );
+
+            if(isNaN(n)){
+                alert('The chance is error !');
+                return;
+            }
+
+            return n;
+        };
+        
+        // 锁住开始按钮
+        slot.lockBtnStart = function( isLock ){
+            
+            if( isLock ){ 
+                slot.getChance() === 0 ? $hand.hide() : $hand.show();
+                return;
+            }
+            
+            $hand.hide();
+            $btnStart.toggleClass( opts.btnStartOn ).delay(100)
+                    .queue(function( next ){
+                        $(this).toggleClass( opts.btnStartOn )
+                        next();
+                    });
+        };
+
+        // 播放音频
+        slot.audio = function(src){
+            var audio = document.createElement('audio'),
+                handler = function(){   
+                    document.body.removeChild( audio );
+                    audio = null;
+                };
+
+            audio.style.display = 'none';
+            audio.autoplay = true;
+            audio.src = opts.baseURL + src;
+
+            audio.addEventListener('ended', handler, false);
+            audio.addEventListener('error', handler, false); 
+
+            document.body.appendChild( audio );
         }
-        $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1)); 
-    
+
         // 开始
         slot.play = function(indexArr, callback){   
             if( indexArr == null ){
@@ -62,19 +110,16 @@
             }
 
             if( indexArr.length !== itemSize ){
-                alert( 'The num of indexArr is error!' );
+                alert( 'The size of indexArr is error!' );
                 return;
             }
 
             for(var i = 0; i < indexArr.length; i++){
                 if( indexArr[i] > opts.numOfPrize || indexArr[i] <= 0 ){
-                    alert('The index of indexArr ' + indexArr[i] +' is error');
+                    alert('The index of indexArr ' + indexArr[i] +' is error !');
                     return;
                 } 
             }
-
-            // 锁屏
-            lockScreen( true );
 
             // 跳转
             slot.toIndex( indexArr, callback );
@@ -95,8 +140,8 @@
                         complete: function(){
                             if( index === itemSize - 1 ){
                                 isBegin = false;
-                                // 解屏
-                                lockScreen( false );
+                                
+                                slot.lockBtnStart(true);
 
                                 typeof callback === 'function' && callback();
                             }
@@ -106,75 +151,21 @@
             });
         };
 
-        // 锁住开始按钮
-        slot.lockBtnStart = function( isLock ){
-            
-            if( isLock ){ 
+        // 添加事件
+        $btnStart.on('click', function(){   
+            // 正在抽奖 或 机会为 0
+            if(isBegin || slot.getChance() === 0){
                 return;
             }
 
-            $btnStart.find('img').hide();
-            $btnStart.toggleClass( opts.btnOn ).delay(100)
-                    .queue(function( next ){
-                        $(this).toggleClass( opts.btnOn )
-                        next();
-                    });
-        };
+            isBegin = true;
+            slot.lockBtnStart(false); 
 
-        slot.onStart = function( fn ){
-            slot.addEvent( fn );
-        };
+            typeof opts.onInit === 'function' && opts.onInit(isBegin); 
+        })
 
-        slot.addEvent = function( fn ){
 
-            if( !fn || typeof fn !== 'function' || !$btnStart.size() ) {
-                return;
-            }
-
-            // onStart 只添加一次
-            if( opts.onStart && typeof opts.onStart === 'function' ){
-                fn = opts.onStart;
-            }
-
-            // 添加事件
-            $btnStart.on( opts.event, function(e){
-                e.preventDefault();
-
-                // 锁住开始按钮
-                if( isBegin ){  
-                    slot.lockBtnStart( true );
-                    return;
-                };
-                
-                // 开始
-                isBegin = true;
-                //开启开始按钮       
-                slot.lockBtnStart( false );
-
-                fn.call(null, isBegin );
-            } )
-        }; 
-
-        slot.audio = function( src ){
-            var audio = document.createElement('audio'),
-                handler = function(){   
-                    document.body.removeChild( audio );
-                    audio = null;
-                };
-
-            audio.style.display = 'none';
-            audio.autoplay = true;
-            audio.src = opts.baseURL + src;
-
-            audio.addEventListener('ended', handler, false);
-            audio.addEventListener('error', handler, false); 
-
-            document.body.appendChild( audio );
-            audio.play();
-        }
-
-        slot.addEvent( opts.onStart );
-
+        slot.init();
     };
 
     return {

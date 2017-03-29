@@ -18,6 +18,10 @@
 			ret = opts.time.split(/\s+\-+(?:\s+)/g),
 			nowTime, endTime, difTime, timer;
 
+			if(!ret || !ret.length){
+				return;
+			}
+
 			if(ret.length === 1){
 				nowTime = new Date();
 				endTime = new Date(ret[0]);
