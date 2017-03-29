@@ -24,11 +24,15 @@
 
 
     // 初始化
-    function init( options ){
+    function slot( options ){
         var defaultOps = {
+            BaseURL: '',
             event: 'click',
             btnStart: null,
+            btnOn: null,
+            btnOff: null,
             target: null,
+            defaultIndex: 1,
             numOfPrize: 4,
             cycle: 80,
             duration: 5000,
@@ -36,21 +40,22 @@
             onStart: null
         };
 
-        var opts = $.extend({}, defaultOps, options || {});  
+        var opts = $.extend( {}, defaultOps, options || {} );
         var $btnStart = $(opts.btnStart),
             $target = $(opts.target),
             $items = $target.children(),
-            itemSize = $items.size();
+            itemSize = $items.size(),
+            itemHeight = $items.height() / opts.numOfPrize,
+            isBegin = false;
 
-        var isBegin = false;  
-
-        // 是否开始
-        this.isBegin = isBegin;
+        if( opts.defaultIndex > opts.numOfPrize || opts.defaultIndex < 0 ){
+            alert('The default index is error!');
+            return;
+        }
+        $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1)); 
     
         // 开始
-        this.play = function(indexArr, callback){   
-            if( isBegin ) return;
-
+        slot.play = function(indexArr, callback){   
             if( indexArr == null ){
                 alert('indexArr is null！');
                 return;
@@ -61,7 +66,7 @@
                 return;
             }
 
-            for(var i = 0; i < indexArr.length; i++){  
+            for(var i = 0; i < indexArr.length; i++){
                 if( indexArr[i] > opts.numOfPrize || indexArr[i] <= 0 ){
                     alert('The index of indexArr ' + indexArr[i] +' is error');
                     return;
@@ -71,11 +76,15 @@
             // 锁屏
             lockScreen( true );
 
-            isBegin = true;
+            // 跳转
+            slot.toIndex( indexArr, callback );
+        };
 
-            var itemHeight = $items.height() / opts.numOfPrize;   
+        // 转到 indexArr
+        slot.toIndex = function(indexArr, callback){
+            var itemHeight = $items.height() / opts.numOfPrize; 
 
-            $items.css('backgroundPositionY', 0);
+            $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
             $items.each(function( index ){ 
                 var _this = this;
                 window.setTimeout(function(){
@@ -86,7 +95,7 @@
                         complete: function(){
                             if( index === itemSize - 1 ){
                                 isBegin = false;
-                                // 截屏
+                                // 解屏
                                 lockScreen( false );
 
                                 typeof callback === 'function' && callback();
@@ -95,34 +104,81 @@
                     })
                 }, index * opts.interval);
             });
-
-            return this;
         };
 
-        this.onStart = function( fn ){
+        // 锁住开始按钮
+        slot.lockBtnStart = function( isLock ){
             
-            this.addEventListener( fn );
+            if( isLock ){ 
+                return;
+            }
 
-            return this;
+            $btnStart.find('img').hide();
+            $btnStart.toggleClass( opts.btnOn ).delay(100)
+                    .queue(function( next ){
+                        $(this).toggleClass( opts.btnOn )
+                        next();
+                    });
         };
 
-        this.addEventListener = function( fn ){
-            if( !fn || typeof fn !== 'function' || !$btnStart.size() ) return;
+        slot.onStart = function( fn ){
+            slot.addEvent( fn );
+        };
 
+        slot.addEvent = function( fn ){
+
+            if( !fn || typeof fn !== 'function' || !$btnStart.size() ) {
+                return;
+            }
+
+            // onStart 只添加一次
+            if( opts.onStart && typeof opts.onStart === 'function' ){
+                fn = opts.onStart;
+            }
+
+            // 添加事件
             $btnStart.on( opts.event, function(e){
                 e.preventDefault();
-                fn.call(Z, isBegin );
-            } )
 
-            return this;
+                // 锁住开始按钮
+                if( isBegin ){  
+                    slot.lockBtnStart( true );
+                    return;
+                };
+                
+                // 开始
+                isBegin = true;
+                //开启开始按钮       
+                slot.lockBtnStart( false );
+
+                fn.call(null, isBegin );
+            } )
         }; 
 
-        this.addEventListener( opts.onStart );
+        slot.audio = function( src ){
+            var audio = document.createElement('audio'),
+                handler = function(){   
+                    document.body.removeChild( audio );
+                    audio = null;
+                };
+
+            audio.style.display = 'none';
+            audio.autoplay = true;
+            audio.src = opts.baseURL + src;
+
+            audio.addEventListener('ended', handler, false);
+            audio.addEventListener('error', handler, false); 
+
+            document.body.appendChild( audio );
+            audio.play();
+        }
+
+        slot.addEvent( opts.onStart );
 
     };
 
     return {
-        init: init
+        slot: slot
     }
 
 })(jQuery);

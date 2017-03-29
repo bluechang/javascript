@@ -54,10 +54,10 @@
 	Tab.prototype.initEvents = function(){
 		var t = this;
 
-		t.$navs.on(t.opts.eventType, function(){
+		t.$navs.on(t.opts.event, function(){
 			var i = $(this).index();
 			t.toIndex(i);
-		}).eq(t.opts.defaultIndex).trigger(t.opts.eventType);
+		}).eq(t.opts.defaultIndex).trigger(t.opts.event);
 	}
 
 	Tab.prototype.toIndex = function(index){
@@ -71,7 +71,7 @@
 
 	// 默认参数
 	Tab.defaultOpts = {
-		eventType: 'mouseover',
+		event: 'mouseover',
 		tabNav: '.tab-nav',
 		tabMain: '.tab-main',
 		active: 'on',
@@ -82,8 +82,9 @@
 	// 挂载到jQuery原型上
 	$.fn.skyTab = function(options){ 
 		// 只实例化第一个并返回
-		if(this.length === 0){
-			throw new Error('The elem is not exist!!!');
+		if( this.length === 0 ){
+			var msg = this.selector || 'tab';
+			throw new Error( '\'' + msg + '\'' + ' is not exist！！！');
 		}
 
 		// 只实例化第一个并返回

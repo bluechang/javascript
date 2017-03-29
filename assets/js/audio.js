@@ -1,9 +1,9 @@
 
 
 //音频
-;var M = (function($, w){ 
+;var M = (function($, wx){ 
 
-	function player(options){
+	function music(options){
 		var defaultOpts = {
 			btn: null,
 			audio: null,
@@ -12,9 +12,10 @@
 			autoPlay: false
 		};
 		var opts = $.extend({}, defaultOpts, options || {});
-		var $btn = $( opts.btn );
-		var audio = opts.audio;
-		var that = this;
+		var isWX = /micromessenger/g.test(navigator.userAgent.toLowerCase()); 
+
+		var $btn = $( opts.btn ),
+			audio = opts.audio;
 
 		if( typeof audio === 'string' ){
 			audio = document.querySelector( audio );
@@ -24,48 +25,41 @@
 			audio = audio.get(0);
 		}
 
-		if( audio.nodeType !== 1 ){
-			alert('请输入正确的 DOM Audio');
+		if( audio.nodeName.toLowerCase() !== 'audio' ){
+			alert('请输入正确的 Audio');
 			return;
 		}
 
-		// 播放
-		this.play = function(){
+		music.play = function(){
 			audio.play();
-			$btn.removeClass( opts.off ).addClass( opts.on );
+			$btn.addClass( opts.on ).removeClass( opts.off );
 		}
 
-		// 暂停
-		this.pause = function(){
+		music.pause = function(){
 			audio.pause();
-			$btn.removeClass( opts.on ).addClass( opts.off );
+			$btn.addClass( opts.off ).removeClass( opts.on );
 		}
 
-		// 添加事件
 		$btn.on('click', function(){
-			audio.paused ? that.play() : that.pause();
+			audio.paused ? music.play() : music.pause();
 		});
 
-		if( !opts.autoPlay ){
-			this.pause(); 
-		}
-
 		// 只能在微信中实现自动播放
-		if( opts.autoPlay && !w ){  
+		if( opts.autoPlay && isWX && !wx ){  
 			alert('请添加微信配置！');
 			return;
 		}
 
-		if( opts.autoPlay && w ){
-			w.ready(function(){  
-				that.play();
+		if( opts.autoPlay && isWX && wx ){
+			wx.ready(function(){  
+				music.play();
 			})
 		}
 
 	};
 
 	return {
-		player: player
+		music: music
 	}
 
 })(jQuery, wx);
