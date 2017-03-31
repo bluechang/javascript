@@ -12,7 +12,7 @@
 			autoPlay: false
 		};
 		var opts = $.extend({}, defaultOpts, options || {});
-		var isWX = /micromessenger/g.test(navigator.userAgent.toLowerCase()); 
+		var isWX = /micromessenger/ig.test(navigator.userAgent); 
 
 		var $btn = $( opts.btn ),
 			audio = opts.audio;

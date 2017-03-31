@@ -13,8 +13,50 @@
 
 // slotMachine
 ;var Z = (function($){
+    var docElem = document.documentElement
+        isMobile = 'ontouchstart' in docElem ? true : false,
+        resizeEvent = isMobile ? 'orientationchange' : 'resize';
+        
+    var $panel = $('.panel'),
+        $popup = $('.popup .main');
 
-    // 初始化
+    $popup.css('overflow-y', isMobile ? 'scroll' : 'initial');
+
+
+    // 设置rem
+    function rem(width, height, max, callback){
+        var base = 100, minWidth = 320,
+            design, client, isLandscape = false;
+
+        client = docElem[width ? 'clientWidth' : 'clientHeight'];
+
+        if( typeof width === 'number' && height === false ){
+            design = width;
+        }
+
+        if( width === false && typeof height === 'number' ){
+            design = height;
+        }
+
+        if(!isMobile || isMobile && window.orientation === 0){
+            if( width && (max || (max = width)) && (client > max) ){
+                client = max;
+            }
+            isLandscape = false;
+        }
+
+        if(isMobile && window.orientation !== 0){
+            client = minWidth;
+            isLandscape = true;
+        }
+
+        docElem.style.fontSize = (base / design) * client + 'px';
+
+        typeof callback === 'function' && callback( isLandscape );
+    };
+
+
+    // 入口
     function slot( options ){
         var defaultOps = {
             BaseURL: '',
@@ -38,8 +80,9 @@
             $target = $(opts.target),
             $chance = $(opts.chance),
             $items = $target.children(),
+            $win = $(window),
             itemSize = $items.size(),
-            itemHeight = $items.height() / opts.numOfPrize,
+            itemHeight,
             rnum = /\d/i,
             isBegin = false;
 
@@ -49,10 +92,22 @@
             return;
         } 
 
+        function onInit(){
+            // 设置rem
+            rem(640, false, 640, function( isLandscape ){  
+                $panel.css('max-width', isLandscape ? 320 : 640); 
+            });
+
+            // 锁住按钮
+            slot.lockBtnStart(true);
+
+            itemHeight = $items.height() / opts.numOfPrize,
+            $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
+        }
+
         // 初始化
         slot.init = function(){
-            slot.lockBtnStart(true);
-            $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
+            $win.on(resizeEvent, onInit).trigger(resizeEvent);
         };
 
         // 获取剩余机会
@@ -94,7 +149,7 @@
 
             audio.style.display = 'none';
             audio.autoplay = true;
-            audio.src = opts.baseURL + src;
+            audio.src = opts.BaseURL + src;
 
             audio.addEventListener('ended', handler, false);
             audio.addEventListener('error', handler, false); 
@@ -149,6 +204,10 @@
                     })
                 }, index * opts.interval);
             });
+        };
+
+        slot.onStart = function( fn ){
+            opts.onInit = fn;
         };
 
         // 添加事件
