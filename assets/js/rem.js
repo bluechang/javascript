@@ -9,7 +9,7 @@
  */
 ;(function(w, h, m){
 	var docElem = document.documentElement,
-		base = 100, design, client, callback;
+		base = 100, design, client, onResize;
 
 	if( typeof w === 'number' && h === false ){
 		design = w;
@@ -19,7 +19,7 @@
 		design = h;
 	}
 
-	callback = function(){
+	onResize = function(){
 		client = docElem[w ? 'clientWidth': 'clientHeight'];
 		if( w && (m || (m = w)) && (client > m) ){
 			client = m;
@@ -27,9 +27,9 @@
 		docElem.style.fontSize = (base / design) * client + 'px';
 	};
 
-	window.addEventListener('resize', callback, false);
+	window.addEventListener('resize', onResize, false);
 
-	callback();
+	onResize();
 })(640, false);
 
 
