@@ -30,6 +30,7 @@
 	window.addEventListener('resize', onResize, false);
 
 	onResize();
+	
 })(640, false);
 
 

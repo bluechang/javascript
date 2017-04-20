@@ -1,6 +1,22 @@
 
 
-//音频
+
+/**
+ * 音频
+ *
+ * M.music(options)
+ * options:
+ * 		btn: 触发按钮，
+ * 		audio: 音频
+ * 		on: 打开类名
+ * 		off: 关闭类名
+ * 		autoplay: 是否自动播放
+ *
+ * 公开接口：
+ * 	play: 播放
+ * 	pause: 暂停
+ */
+
 ;var M = (function($, wx){ 
 
 	function music(options){
@@ -9,7 +25,7 @@
 			audio: null,
 			on: null,
 			off: null,
-			autoPlay: false
+			autoplay: false
 		};
 		var opts = $.extend({}, defaultOpts, options || {});
 		var isWX = /micromessenger/ig.test(navigator.userAgent); 
@@ -45,18 +61,19 @@
 		});
 
 		// 只能在微信中实现自动播放
-		if( opts.autoPlay && isWX && !wx ){  
+		if( opts.autoplay && isWX && !wx ){  
 			alert('请添加微信配置！');
 			return;
 		}
 
-		if( opts.autoPlay && isWX && wx ){
+		if( opts.autoplay && isWX && wx ){
 			wx.ready(function(){  
 				music.play();
 			})
 		}
 
 	};
+	
 
 	return {
 		music: music
