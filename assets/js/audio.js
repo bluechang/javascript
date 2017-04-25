@@ -4,7 +4,7 @@
 /**
  * 音频
  *
- * M.music(options)
+ * M.audio(options)
  * options:
  * 		btn: 触发按钮，
  * 		audio: 音频
@@ -17,9 +17,9 @@
  * 	pause: 暂停
  */
 
-;var M = (function($, wx){ 
+;var M = (function($){ 
 
-	function music(options){
+	function audio(options){
 		var defaultOpts = {
 			btn: null,
 			audio: null,
@@ -27,56 +27,73 @@
 			off: null,
 			autoplay: false
 		};
+
 		var opts = $.extend({}, defaultOpts, options || {});
 		var isWX = /micromessenger/ig.test(navigator.userAgent); 
 
-		var $btn = $( opts.btn ),
-			audio = opts.audio;
+		var $btn = $(opts.btn),
+			audioElem = opts.audio;
 
-		if( typeof audio === 'string' ){
-			audio = document.querySelector( audio );
+		// 字符串
+		if( typeof audioElem === 'string' ){
+			audioElem = document.querySelector( audioElem );
 		}
 
-		if( audio instanceof jQuery ){
-			audio = audio.get(0);
+		// jQuery
+		if( audioElem instanceof $ ){
+			audioElem = audioElem.get(0);
 		}
 
-		if( audio.nodeName.toLowerCase() !== 'audio' ){
+		if( audioElem.nodeName.toLowerCase() !== 'audio' ){
 			alert('请输入正确的 Audio');
 			return;
 		}
 
-		music.play = function(){
-			audio.play();
+		// 播放
+		audio.play = function(){
+			audioElem.play();
 			$btn.addClass( opts.on ).removeClass( opts.off );
+			
+			if(audioElem.paused){
+				audio.pause();
+				audio.warn('The current environment does not support autoplay !!!');
+			}
 		}
 
-		music.pause = function(){
-			audio.pause();
+		// 暂停
+		audio.pause = function(){
+			audioElem.pause();
 			$btn.addClass( opts.off ).removeClass( opts.on );
 		}
 
+		// 警告
+		audio.warn = function(msg){
+			console.warn(msg);
+		}
+
+		// 按钮事件
 		$btn.on('click', function(){
-			audio.paused ? music.play() : music.pause();
+			audioElem.paused ? audio.play() : audio.pause();
 		});
 
-		// 只能在微信中实现自动播放
-		if( opts.autoplay && isWX && !wx ){  
-			alert('请添加微信配置！');
-			return;
+		// 是否自动播放
+		if(opts.autoplay){
+			// 微信
+			if(isWX && wx){
+				wx.ready(function(){  
+					audio.play();
+				});
+			}else{
+				audio.play();
+				audio.warn('The current environment is not in the weixin or the object of wx is not exist !!!');
+			}
+		}else{
+			audio.pause();
 		}
-
-		if( opts.autoplay && isWX && wx ){
-			wx.ready(function(){  
-				music.play();
-			})
-		}
-
 	};
-	
 
 	return {
-		music: music
+		audio: audio
 	}
 
-})(jQuery, wx);
+})(jQuery);

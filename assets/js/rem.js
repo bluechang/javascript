@@ -2,9 +2,9 @@
 /**
  * 设置 rem
  * 
- * width: number | false
- * height: number | false
- * max: <number>
+ * width: number | false, 	设计图宽 
+ * height: number | false, 	设计图高
+ * max: <number>			最大值
  * 
  */
 ;(function(w, h, m){
