@@ -16,6 +16,9 @@
  * 		play: 播放
  * 	 	pause: 暂停
  *
+ * 注：
+ * 		iOS微信 需要导入 JS-SDK，并配置。无论配置成功或失败，都必须有
+ *
  * 例子：
  * 		M.audio({
  * 	 		btn: '.btn',
@@ -26,9 +29,10 @@
  * 		})
  */
 
+
 ;var M = (function($){ 
 
-	function audio(options){
+	function audio(options){ 
 		var defaultOpts = {
 			btn: null,
 			audio: null,
@@ -65,7 +69,7 @@
 			
 			if(audioElem.paused){
 				audio.pause();
-				audio.warn('The current environment does not support autoplay !!!');
+				alert('The current environment does not support autoplay !!!');
 			}
 		}
 
@@ -83,18 +87,18 @@
 		// 按钮事件
 		$btn.on('click', function(){
 			audioElem.paused ? audio.play() : audio.pause();
-		});
+		});	
 
 		// 是否自动播放
-		if(opts.autoplay){
+		if(opts.autoplay){ 
 			// 微信
-			if(isWX && wx){
+			if(isWX && wx){ 
 				wx.ready(function(){  
 					audio.play();
 				});
 			}else{
-				audio.play();
-				audio.warn('The current environment is not in the weixin or the object of wx is not exist !!!');
+				audio.play();    
+				alert('The current environment is not in the weixin or the object of wx is not exist !!!');
 			}
 		}else{
 			audio.pause();
