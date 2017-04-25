@@ -13,46 +13,47 @@
 
 // slotMachine
 ;var Z = (function($){
-    var docElem = document.documentElement
-        isMobile = 'ontouchstart' in docElem ? true : false,
-        resizeEvent = isMobile ? 'orientationchange' : 'resize';
-        
-    var $panel = $('.panel'),
-        $popup = $('.popup .main');
-
-    $popup.css('overflow-y', isMobile ? 'scroll' : 'initial');
-
+    var docElem = document.documentElement,
+        isMobile = 'ontouchstart' in docElem ? true : false;
 
     // 设置rem
-    function rem(width, height, max, callback){
-        var base = 100, minWidth = 320,
-            design, client, isLandscape = false;
+    function rem(){
+        var $panel = $('.panel'),
+            $popup = $('.popup .main');
 
-        client = docElem[width ? 'clientWidth' : 'clientHeight'];
+        $popup.css('overflow-y', isMobile ? 'scroll' : 'initial');
 
-        if( typeof width === 'number' && height === false ){
-            design = width;
-        }
+        var minWidth = 320, maxWidth = 640,
+            base = 100, design = 640, client,
+            isPortrait;
 
-        if( width === false && typeof height === 'number' ){
-            design = height;
-        }
+        client = docElem.clientWidth;
+        
+        if(isMobile){
+            isPortrait = (window.orientation === 0 || window.orientation === 180) ? true : false;  
 
-        if(!isMobile || isMobile && window.orientation === 0){
-            if( width && (max || (max = width)) && (client > max) ){
-                client = max;
+            if(isPortrait){
+                // 竖屏
+                if(client > maxWidth){
+                    client = maxWidth;
+                }
+
+                $panel.css('maxWidth', maxWidth);
+            }else{
+                // 横屏
+                client = minWidth;
+
+                $panel.css('maxWidth', minWidth);
             }
-            isLandscape = false;
-        }
+        }else{
+            if(client > maxWidth){
+                client = maxWidth;
+            }
 
-        if(isMobile && window.orientation !== 0){
-            client = minWidth;
-            isLandscape = true;
+            $panel.css('maxWidth', maxWidth);
         }
-
+        
         docElem.style.fontSize = (base / design) * client + 'px';
-
-        typeof callback === 'function' && callback( isLandscape );
     };
 
 
@@ -80,10 +81,8 @@
             $target = $(opts.target),
             $chance = $(opts.chance),
             $items = $target.children(),
-            $win = $(window),
             itemSize = $items.size(),
             itemHeight,
-            rnum = /\d/i,
             isBegin = false;
 
         // defaultIndex
@@ -92,14 +91,9 @@
             return;
         } 
 
-        function onInit(){
+        function onResize(){
             // 设置rem
-            rem(640, false, 640, function( isLandscape ){  
-                $panel.css('max-width', isLandscape ? 320 : 640); 
-            });
-
-            // 锁住按钮
-            slot.lockBtnStart(true);
+            rem();
 
             itemHeight = $items.height() / opts.numOfPrize,
             $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
@@ -107,12 +101,16 @@
 
         // 初始化
         slot.init = function(){
-            $win.on(resizeEvent, onInit).trigger(resizeEvent);
+            // 锁住按钮
+            slot.lockBtnStart(true);
+
+            $(window).on('resize', onResize).trigger('resize');
         };
 
-        // 获取剩余机会
+        // 获取机会
         slot.getChance = function(){
             var classname = $chance.attr('class'),
+                rnum = /\d/i,
                 n = parseInt( rnum.exec(classname)[0] );
 
             if(isNaN(n)){
@@ -122,8 +120,15 @@
 
             return n;
         };
+
+        // 设置机会
+        slot.setChance = function(n){
+            $chance.removeClass().addClass('chance chance' + n);
+
+            n === 0 ? $hand.hide() : $hand.show();
+        }
         
-        // 锁住开始按钮
+        // 要锁住开始按钮吗？
         slot.lockBtnStart = function( isLock ){
             
             if( isLock ){ 
@@ -138,24 +143,6 @@
                         next();
                     });
         };
-
-        // 播放音频
-        slot.audio = function(src){
-            var audio = document.createElement('audio'),
-                handler = function(){   
-                    document.body.removeChild( audio );
-                    audio = null;
-                };
-
-            audio.style.display = 'none';
-            audio.autoplay = true;
-            audio.src = opts.BaseURL + src;
-
-            audio.addEventListener('ended', handler, false);
-            audio.addEventListener('error', handler, false); 
-
-            document.body.appendChild( audio );
-        }
 
         // 开始
         slot.play = function(indexArr, callback){   
@@ -205,6 +192,24 @@
                 }, index * opts.interval);
             });
         };
+
+        // 播放音频
+        slot.audio = function(src){
+            var audio = document.createElement('audio'),
+                handler = function(){   
+                    document.body.removeChild( audio );
+                    audio = null;
+                };
+
+            audio.style.display = 'none';
+            audio.autoplay = true;
+            audio.src = opts.BaseURL + src;
+
+            audio.addEventListener('ended', handler, false);
+            audio.addEventListener('error', handler, false); 
+
+            document.body.appendChild( audio );
+        }
 
         slot.onStart = function( fn ){
             opts.onInit = fn;

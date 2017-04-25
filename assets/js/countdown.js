@@ -1,4 +1,29 @@
 
+/**
+ *
+ * countdonw(options)
+ * options:
+ * 		type: server | local, 时间类型,
+ * 		time: 时间段, 如：'2017/04/25 00:00:01 - 2017/04/25 00:00:02',
+ *   	onTick: 每次间隔，执行的函数，参数分别为 （天, 时, 分, 秒）,
+ *   	onEnd: 结束时执行的回调函数，
+ *   	delay: 间隔时间，默认 1000ms, 即 1s
+ *
+ * 
+ * 例子：
+ * Z.countdown({
+ * 		type: 'server',
+ * 		time: '2017/04/25 00:00:01 - 2017/04/25 00:00:02',
+ * 		onTick: function(day, hour, minute, second, isEnd){
+ * 			document.body.innerHTML = day + '天' + hour + '时' + minute + '分' + second + '秒';
+ * 		},
+ * 		onEnd: function(){
+ * 			console.log('It's over.');
+ * 		}
+ * })
+ */
+
+
 ;Z = (function($){
 
 	function covertToStr(val) {
@@ -15,33 +40,33 @@
 		};
 
 		var opts = $.extend({}, defaultOpts, options || {}),
-			ret = opts.time.split(/\s+\-+(?:\s+)/g),
+			times = opts.time.split(/\s+\-+(?:\s+)/g),
 			nowTime, endTime, difTime, timer;
 
-			if(!ret || !ret.length){
+			if(!times || !times.length){
 				return;
 			}
 
-			if(ret.length === 1){
+			if(times.length === 1){
 				nowTime = new Date();
-				endTime = new Date(ret[0]);
+				endTime = new Date(times[0]);
 			};
 
-			if(ret.length === 2){
-				nowTime = new Date(ret[0]);
-				endTime = new Date(ret[1]);
+			if(times.length === 2){
+				nowTime = new Date(times[0]);
+				endTime = new Date(times[1]);
 			};
 
-			difTime = endTime -nowTime;
+			difTime = endTime - nowTime;
 
 			// 一次 interval
 			function tick(){
 				//首先判断 是否结束，避免不必要的执行
-				if(difTime <= 0){
+				if( difTime <= 0 ){
 					typeof opts.onTick === 'function' && opts.onTick('00', '00', '00', '00', true);
 					typeof opts.onEnd === 'function' && opts.onEnd();
+
 					clearInterval(timer);
-					return false;
 				}
 
 				var day 	= Math.floor( difTime / 1000 / 60 / 60 / 24 ),
@@ -49,7 +74,7 @@
 					minute 	= Math.floor( difTime / 1000 / 60 % 60  ),
 					second 	= Math.floor( difTime / 1000 % 60 );
 
-				typeof opts.onTick === 'function' && opts.onTick(covertToStr(day), covertToStr(hour), covertToStr(minute), covertToStr(second), false);
+				typeof opts.onTick === 'function' && opts.onTick( covertToStr(day), covertToStr(hour), covertToStr(minute), covertToStr(second), false );
 			};
 
 			// 服务器时间
@@ -77,4 +102,5 @@
 	return {
 		countdown: countdown
 	};
+
 })(jQuery);
