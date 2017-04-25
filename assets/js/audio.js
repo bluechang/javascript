@@ -10,11 +10,20 @@
  * 		audio: 音频
  * 		on: 打开类名
  * 		off: 关闭类名
- * 		autoplay: 是否自动播放
+ * 		autoplay: 是否自动播放, true | false(default)
  *
  * 公开接口：
- * 	play: 播放
- * 	pause: 暂停
+ * 		play: 播放
+ * 	 	pause: 暂停
+ *
+ * 例子：
+ * 		M.audio({
+ * 	 		btn: '.btn',
+ * 			audio: '.audio',
+ * 			on: 'btn-on',
+ * 			off: 'btn-off',
+ * 			autoplay: true
+ * 		})
  */
 
 ;var M = (function($){ 
