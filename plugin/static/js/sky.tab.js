@@ -42,6 +42,7 @@
 		// tabNav
 		t.$tabNav = getJq(t.opts.tabNav, t.$container);
 		t.$navs = t.$tabNav.children();
+		t.length = t.$navs.length;
 
 		// tabMain
 		t.$tabMain = getJq(t.opts.tabMain, t.$container);
@@ -63,10 +64,14 @@
 	Tab.prototype.toIndex = function(index){
 		var t = this;
 
+		t.activeIndex = index;
+
 		t.$navs.removeClass(t.opts.active)
 				.eq(index).addClass(t.opts.active);
 
 		t.$mains.hide().eq(index).show();
+
+		typeof t.opts.onChange === 'function' && t.opts.onChange(t);
 	}
 
 	// 默认参数
@@ -75,7 +80,8 @@
 		tabNav: '.tab-nav',
 		tabMain: '.tab-main',
 		active: 'on',
-		defaultIndex: 0
+		defaultIndex: 0,
+		onChange: null
 	};
 	
 

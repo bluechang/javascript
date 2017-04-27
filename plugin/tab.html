@@ -55,7 +55,10 @@
 			tabNav: '.tab-nav',
 			tabMain: '.tab-main',
 			active: 'on',
-			defaultIndex: 0
+			defaultIndex: 0,
+			onChange: function(obj){
+				console.log(obj.activeIndex, obj.length);
+			}
 		})
 	</script>
 
