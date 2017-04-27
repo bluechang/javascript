@@ -14,32 +14,35 @@
 // slotMachine
 ;var Z = (function($){
     var docElem = document.documentElement,
-        isMobile = 'ontouchstart' in docElem ? true : false;
-
+        isMobile = 'ontouchstart' in docElem ? true : false,
+        resizeEvent = isMobile ? 'orientationchange' : 'resize';
+    
     // 设置rem
-    function rem(){
-        var $panel = $('.panel'),
-            $popup = $('.popup .main');
-
+    function remPopup(){
+        var $popup = $('.popup .main');
         $popup.css('overflow-y', isMobile ? 'scroll' : 'initial');
+    }
+
+    function remPanel(){
+        var $panel = $('.panel');
 
         var minWidth = 320, maxWidth = 640,
             base = 100, design = 640, client,
             isPortrait;
 
         client = docElem.clientWidth;
-        
+
         if(isMobile){
             isPortrait = (window.orientation === 0 || window.orientation === 180) ? true : false;  
 
-            if(isPortrait){
+            if(isPortrait){  
                 // 竖屏
                 if(client > maxWidth){
                     client = maxWidth;
                 }
 
                 $panel.css('maxWidth', maxWidth);
-            }else{
+            }else{       
                 // 横屏
                 client = minWidth;
 
@@ -52,9 +55,14 @@
 
             $panel.css('maxWidth', maxWidth);
         }
-        
+
         docElem.style.fontSize = (base / design) * client + 'px';
     };
+
+    function rem(){
+        remPanel();
+        remPopup();
+    }
 
 
     // 入口
@@ -104,7 +112,7 @@
             // 锁住按钮
             slot.lockBtnStart(true);
 
-            $(window).on('resize', onResize).trigger('resize');
+            $(window).on(resizeEvent, onResize).trigger(resizeEvent);
         };
 
         // 获取机会

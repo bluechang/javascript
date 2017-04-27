@@ -17,8 +17,7 @@
 	
 	var docElem = document.documentElement,
 		base = 100, design, client, 
-		onResize, onDOMContetnLoaded,
-		style;
+		onResize, insertStyle, style;
 
 	if( typeof w === 'number' && h === false ){
 		design = w;
@@ -29,8 +28,8 @@
 	}
 
 
-	// DOMContentLoaded 事件
-	onDOMContentLoaded = function(){
+	// insertStyle
+	insertStyle = function(){
 		var head = document.getElementsByTagName('head')[0],
 			firstStyle = head.getElementsByTagName('link')[0] || head.getElementsByTagName('style')[0];
 
@@ -56,7 +55,8 @@
 	};
 
 	window.addEventListener('resize', onResize, false);
-	window.addEventListener('DOMContentLoaded', onDOMContentLoaded, false);
+
+	insertStyle();
 	
 })(640, false);
 
