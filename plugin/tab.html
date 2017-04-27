@@ -49,6 +49,15 @@
 
 	<script type="text/javascript" src="static/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="static/js/sky.tab.js"></script>
+	<script type="text/javascript">
+		$('.tab-container').skyTab({
+			event: 'mouseover',
+			tabNav: '.tab-nav',
+			tabMain: '.tab-main',
+			active: 'on',
+			defaultIndex: 0
+		})
+	</script>
 
 </body>
 </html>
