@@ -77,8 +77,8 @@
 	// 默认参数
 	Tab.defaultOpts = {
 		event: 'mouseover',
-		tabNav: '.tab-nav',
-		tabMain: '.tab-main',
+		tabNav: null,
+		tabMain: null,
 		active: 'on',
 		defaultIndex: 0,
 		onChange: null

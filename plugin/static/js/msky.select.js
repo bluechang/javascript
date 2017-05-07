@@ -116,7 +116,7 @@
 			// 滑动事件
 			$doc.on('touchmove.Select mousemove.Select', function(e){  
 
-				endY = e.touches[0].clientY || e.clientY;                
+				endY = e.touches && e.touches[0].clientY || e.clientY;                
 				delta = endY - startY;
 				delta >= 0 ? k = -1 : k = 1; 
 

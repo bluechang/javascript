@@ -16,54 +16,6 @@
     var docElem = document.documentElement,
         isMobile = 'ontouchstart' in docElem ? true : false,
         resizeEvent = isMobile ? 'orientationchange' : 'resize';
-    
-    // 设置rem
-    function remPopup(){
-        var $popup = $('.popup .main');
-        $popup.css('overflow-y', isMobile ? 'scroll' : 'initial');
-    }
-
-    function remPanel(){
-        var $panel = $('.panel');
-
-        var minWidth = 320, maxWidth = 640,
-            base = 100, design = 640, client,
-            isPortrait;
-
-        client = docElem.clientWidth;
-
-        if(isMobile){
-            isPortrait = (window.orientation === 0 || window.orientation === 180) ? true : false;  
-
-            if(isPortrait){  
-                // 竖屏
-                if(client > maxWidth){
-                    client = maxWidth;
-                }
-
-                $panel.css('maxWidth', maxWidth);
-            }else{       
-                // 横屏
-                client = minWidth;
-
-                $panel.css('maxWidth', minWidth);
-            }
-        }else{
-            if(client > maxWidth){
-                client = maxWidth;
-            }
-
-            $panel.css('maxWidth', maxWidth);
-        }
-
-        docElem.style.fontSize = (base / design) * client + 'px';
-    };
-
-    function rem(){
-        remPanel();
-        remPopup();
-    }
-
 
     // 入口
     function slot( options ){
@@ -100,9 +52,6 @@
         } 
 
         function onResize(){
-            // 设置rem
-            rem();
-
             itemHeight = $items.height() / opts.numOfPrize,
             $items.css('backgroundPositionY', -itemHeight * (opts.defaultIndex - 1));
         }
