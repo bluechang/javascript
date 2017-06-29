@@ -1,6 +1,9 @@
 
 function DOMReady(fn){
-    fn = fn || function(){ console.log("fn isn't defined") };
+    if(typeof fn !== 'function'){
+        console.warn('Arguemnts must be function !');
+        return;
+    }
 
     // 现代浏览器
     if(document.addEventListener){
