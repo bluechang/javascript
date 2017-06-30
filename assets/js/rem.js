@@ -4,7 +4,7 @@
  * 
  * width: number | false, 	设计图宽 
  * height: number | false, 	设计图高
- * max: <number>			最大值
+ * max: <number>		最大值
  *
  * 注：
  * 1、以宽为标准时，max = width。 以高为标准时没限制。
