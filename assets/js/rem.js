@@ -2,6 +2,8 @@
 /**
  * 设置 rem
  * 
+ * (function(w, h, m){....})(width, height, max);
+ *
  * width: number | false, 	设计图宽 
  * height: number | false, 	设计图高
  * max: <number>		最大值
