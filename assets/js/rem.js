@@ -19,7 +19,7 @@
 	
 	var docElem = document.documentElement,
 		base = 100, design, client, 
-		onResize, insertStyle, style;
+		onResize;
 
 	if( typeof w === 'number' && h === false ){
 		design = w;
@@ -29,22 +29,6 @@
 		design = h;
 	}
 
-
-	// insertStyle
-	insertStyle = function(){
-		var head = document.getElementsByTagName('head')[0],
-			firstStyle = head.getElementsByTagName('link')[0] || head.getElementsByTagName('style')[0];
-
-		style = document.createElement('style'); 
-		style.type = 'text/css';
-
-		firstStyle ? 
-					head.insertBefore(style, firstStyle) :
-					head.appendChild(style);
-
-		onResize();
-	};
-
 	// resize 事件
 	onResize = function(){
 		client = docElem[w ? 'clientWidth': 'clientHeight'];
@@ -53,12 +37,12 @@
 			client = m;
 		}
 
-		style.innerHTML = 'html{ font-size: ' + (base / design) * client + 'px; }';
+		docElem.style.fontSize = (base / design) * client + 'px';
 	};
 
 	window.addEventListener('resize', onResize, false);
 
-	insertStyle();
+	onResize();
 	
 })(640, false);
 
