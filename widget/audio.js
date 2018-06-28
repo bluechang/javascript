@@ -1,6 +1,3 @@
-
-
-
 /**
  * 音频
  *
@@ -30,9 +27,9 @@
  */
 
 
-;var M = (function($){ 
+;var M = (function($){
 
-	function audio(options){ 
+	function audio(options){
 		var defaultOpts = {
 			btn: null,
 			audio: null,
@@ -42,7 +39,7 @@
 		};
 
 		var opts = $.extend({}, defaultOpts, options || {});
-		var isWX = /micromessenger/ig.test(navigator.userAgent); 
+		var isWX = /micromessenger/ig.test(navigator.userAgent);
 
 		var $btn = $(opts.btn),
 			audioElem = opts.audio;
@@ -66,7 +63,7 @@
 		audio.play = function(){
 			audioElem.play();
 			$btn.addClass( opts.on ).removeClass( opts.off );
-			
+
 			if(audioElem.paused){
 				audio.pause();
 				alert('The current environment does not support autoplay !!!');
@@ -87,17 +84,17 @@
 		// 按钮事件
 		$btn.on('click', function(){
 			audioElem.paused ? audio.play() : audio.pause();
-		});	
+		});
 
 		// 是否自动播放
-		if(opts.autoplay){ 
+		if(opts.autoplay){
 			// 微信
-			if(isWX && wx){ 
-				wx.ready(function(){  
+			if(isWX && wx){
+				wx.ready(function(){
 					audio.play();
 				});
 			}else{
-				audio.play();    
+				audio.play();
 				alert('The current environment is not in the weixin or the object of wx is not exist !!!');
 			}
 		}else{

@@ -1,4 +1,3 @@
-
 /**
  *
  * countdonw(options)
@@ -9,7 +8,7 @@
  *   	onEnd: 结束时执行的回调函数，
  *   	delay: 间隔时间，默认 1000ms, 即 1s
  *
- * 
+ *
  * 例子：
  * Z.countdown({
  * 		type: 'server',
