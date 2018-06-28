@@ -1,3 +1,6 @@
+/**
+ * pollyfill：DOMContentLoaded
+ */
 
 function DOMReady(fn){
     if(typeof fn !== 'function'){
@@ -25,7 +28,7 @@ function DOMReady(fn){
                 }
             },
 
-            //Hack: doScroll 检查 
+            //Hack: doScroll 检查
             doScroll = function(){
                 try{
                     // DOM树未创建完之前调用doScroll会抛出错误
