@@ -4,7 +4,7 @@
  * lottery:
  * 
  * 
- * @author: blue chang
+ * @author: Cany
  * @time: 2017-03-14
  * @update: 2017-03-15
  * 

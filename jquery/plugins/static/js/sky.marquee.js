@@ -3,7 +3,7 @@
  * marquee:
  * 
  * 
- * @author: blue chang
+ * @author: Cany
  * @time: 2016-09-21
  * 
  */

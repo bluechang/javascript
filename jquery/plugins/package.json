@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bluechang/test.git"
+    "url": "git+https://github.com/canyzhang/test.git"
   },
   "keywords": [
     "test"
   ],
-  "author": "BlueChang",
+  "author": "Cany",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bluechang/test/issues"
+    "url": "https://github.com/canyzhang/test/issues"
   },
-  "homepage": "https://github.com/bluechang/test#readme",
+  "homepage": "https://github.com/canyzhang/test#readme",
   "devDependencies": {
     "browser-sync": "^2.14.0",
     "gulp": "^3.9.1",

@@ -1,16 +1,16 @@
 /**
  *
  * tab:
- * 
- * 
- * @author: blue chang
+ *
+ *
+ * @author: Cany
  * @time: 2016-09-25
- * 
+ *
  */
 
 ;(function(window, $){
 	'use strict';
-	
+
 	var $doc = $(window.document);
 
 	// 获取jQuery对象
@@ -32,7 +32,7 @@
 
 		return jq;
 	};
-	
+
 	// 构造器
 	function Select(elem, options){
 		var t = this;
@@ -49,7 +49,7 @@
 		t.initialize();
 	}
 
-	Select.prototype.initialize = function(){ 
+	Select.prototype.initialize = function(){
 		var t = this;
 
 		t.initEvents();
@@ -85,46 +85,46 @@
 
 		var txt;
 		var fn = function(){
-			txt = $(this).text();  
+			txt = $(this).text();
 			t.$checked.text(txt);
 			t.$listWrap.stop(true).hide();
 		}
 
 		if(t.opts.listTag === 'ul'){
-			t.$list.on('click', 'li', function(){  
+			t.$list.on('click', 'li', function(){
 				fn.call(this);
 			})
 		}else{
-			t.$list.on('click', function(){  
+			t.$list.on('click', function(){
 				fn.call(this);
 			})
 		}
-		
+
 	}
 
 	// 滚轮事件
 	Select.prototype.listScrollEvent = function(){
 		var t = this;
-		
+
 		var k, delta;
-		var startY = 0, endY = 0;							
+		var startY = 0, endY = 0;
 
-		t.$listWrap.on('touchstart mousedown', function(e){   
+		t.$listWrap.on('touchstart mousedown', function(e){
 
-			startY = (e.touches && e.touches[0].clientY) || e.clientY;		 
+			startY = (e.touches && e.touches[0].clientY) || e.clientY;
 
 			// 滑动事件
-			$doc.on('touchmove.Select mousemove.Select', function(e){  
+			$doc.on('touchmove.Select mousemove.Select', function(e){
 
-				endY = e.touches && e.touches[0].clientY || e.clientY;                
+				endY = e.touches && e.touches[0].clientY || e.clientY;
 				delta = endY - startY;
-				delta >= 0 ? k = -1 : k = 1; 
+				delta >= 0 ? k = -1 : k = 1;
 
 				t.listWrapElem.scrollTop += k*t.opts.speed;
 
 				// 阻止默认行为
 				return false;
-			})	
+			})
 
 			$doc.on('touchend.Select mouseup.Select', function(){
 				$doc.off('.Select');
@@ -138,8 +138,8 @@
 
 		var flag = false;
 
-		$doc.on('click', function(e){  			
-			flag = !!t.$container.has(e.target).length;  
+		$doc.on('click', function(e){
+			flag = !!t.$container.has(e.target).length;
 
 			if(!flag){
 				t.$listWrap.stop(true).hide();
@@ -158,10 +158,10 @@
 		// 滚动速度
 		speed: 5
 	};
-	
+
 
 	// 挂载到jQuery原型上
-	$.fn.skySelect = function(options){   
+	$.fn.skySelect = function(options){
 		// 只实例化第一个并返回
 		if(this.length === 0){
 			throw new Error('The elem is not exist!!!');
@@ -172,6 +172,3 @@
 	}
 
 })(window, jQuery);
-
-
-
