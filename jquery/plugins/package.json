@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/canyzhang/test.git"
+    "url": "git+https://github.com/Kattzhang/test.git"
   },
   "keywords": [
     "test"
   ],
-  "author": "Cany",
+  "author": "Katt",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/canyzhang/test/issues"
+    "url": "https://github.com/Kattzhang/test/issues"
   },
-  "homepage": "https://github.com/canyzhang/test#readme",
+  "homepage": "https://github.com/Kattzhang/test#readme",
   "devDependencies": {
     "browser-sync": "^2.14.0",
     "gulp": "^3.9.1",
