@@ -1,5 +1,5 @@
 /**
- * 基础类型相关
+ * related to primitive type
  */
 
 /**

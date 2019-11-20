@@ -1,5 +1,5 @@
 /**
- * 性能相关
+ * related to performance
  */
 
  export * from './throttle'

@@ -1,7 +1,3 @@
-/**
- * related to Object
- */
-
 function find (list, f) {
   return list.filter(f)[0]
 }
