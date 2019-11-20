@@ -1,0 +1,22 @@
+{
+  "name": "sky",
+  "version": "0.0.1",
+  "description": "Some common javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kattzhang/sky.git"
+  },
+  "keywords": [
+    "JavaScript"
+  ],
+  "author": "KattZhang <1193055507@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kattzhang/sky/issues"
+  },
+  "homepage": "https://github.com/kattzhang/sky#readme"
+}
