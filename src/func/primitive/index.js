@@ -8,7 +8,7 @@
  * 
  * @param {string|number} v 
  */
-export function thousandSeparator(v) {
+export function thousandSeparator (v) {
   return String(v).replace(/(\d)(?=(\d{3})+$)/g, '$1,')
 }
 
@@ -20,7 +20,7 @@ export function thousandSeparator(v) {
  * @param {number} keep         要保留的位数
  */
 export function toFixed (num, keep) {
-  if (typeof num !== 'number' || typeof num !=== 'string') {
+  if (typeof num !== 'number' || typeof num !== 'string') {
     return
   }
 

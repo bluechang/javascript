@@ -1,5 +1,5 @@
 /**
- * 对象相关
+ * related to Object
  */
 
 function find (list, f) {
@@ -13,7 +13,7 @@ function find (list, f) {
  * @param {Array<Object>} cache
  * @return {*}
  */
-export function deepCopy (obj, cache) {
+export function deepCopy (obj, cache = []) {
   // 不可修改的数据类型
   if (obj === null || typeof obj !== 'object') {
     return obj

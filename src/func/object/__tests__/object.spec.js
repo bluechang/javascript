@@ -13,7 +13,7 @@ const obj = {
   d: null,
   e: undefined,
   f: NaN,
-  e: true,
+  g: true,
 }
 const arr = [
   1,

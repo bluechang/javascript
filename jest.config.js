@@ -2,9 +2,9 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   coverageDirectory: './coverage/',
-  coverageReporters: ['html', 'lcov', 'text'],
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleFileExtensions: ['js', 'ts'],
   rootDir: __dirname,
   testMatch: ['<rootDir>/src/**/__tests__/**/*spec.[jt]s?(x)']
