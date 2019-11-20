@@ -7,31 +7,31 @@
  */
 
 export default function rem (width, height, max) {
-	const docEl = document.documentElement
-	const base = 100
-	let design, client
+  const docEl = document.documentElement
+  const base = 100
+  let design, client
 
-	if (typeof width === 'number' && !height) {
-		design = width;
-	}
+  if (typeof width === 'number' && !height) {
+    design = width;
+  }
 
-	if (!width && typeof height === 'number') {
-		design = height;
-	}
+  if (!width && typeof height === 'number') {
+    design = height;
+  }
 
-	function handleResize() {
-		client = docEl[width ? 'clientWidth' : 'clientHeight'];
+  function handleResize() {
+    client = docEl[width ? 'clientWidth' : 'clientHeight'];
 
-		// 以宽为标准，达到最大尺寸时，不变
-		if (width && (max || (max = width)) && (client >= max)) {
-			client = max;
-		}
+    // 以宽为标准，达到最大尺寸时，不变
+    if (width && (max || (max = width)) && (client >= max)) {
+      client = max;
+    }
 
-		docEl.style.fontSize = (base / design) * client + 'px';
-	}
+    docEl.style.fontSize = (base / design) * client + 'px';
+  }
 
-	window.addEventListener('resize', handleResize, false);
+  window.addEventListener('resize', handleResize, false);
 
-	handleResize();
+  handleResize();
 }
 
