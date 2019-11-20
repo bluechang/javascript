@@ -4,7 +4,7 @@
   "description": "Some common javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/kattzhang/sky/issues"
   },
-  "homepage": "https://github.com/kattzhang/sky#readme"
+  "homepage": "https://github.com/kattzhang/sky#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-typescript": "^7.7.2",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0"
+  }
 }
