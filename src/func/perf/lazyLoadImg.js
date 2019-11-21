@@ -5,11 +5,12 @@
  *  selector: '.lazy-img'
  * })
  */
+
 import { debounce } from './index'
 
 export class LazyLoadImg {
   static options = {
-    selector: '', // css 选择器
+    selector: '', // css 选择器 | dom
   }
 
   constructor (options = {}) {
