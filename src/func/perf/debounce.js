@@ -1,9 +1,9 @@
 /**
  * debounce
  * 
- * @param {function} fn 
- * @param {number} wait 
- * @param {boolean} immediate 
+ * @param {function} fn 实际执行的函数
+ * @param {number} wait 延迟执行的时间
+ * @param {boolean} immediate 是否立即执行
  */
 export function debounce(fn, wait = 50, immediate = false) {
   let timer
