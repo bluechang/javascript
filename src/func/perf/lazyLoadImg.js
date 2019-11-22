@@ -1,6 +1,10 @@
 /**
  * lazy load images
  * 
+ * html:
+ *  <img src="placeholder.gif" data-src="real-url.jpg" />
+ * 
+ * js:
  * new LazyLoadImg({
  *  selector: '.lazy-img'
  * })
