@@ -14,6 +14,7 @@ const obj = {
   e: undefined,
   f: NaN,
   g: true,
+  h: () => {}
 }
 const arr = [
   1,
@@ -27,6 +28,10 @@ const arr = [
       a1: 1 
     } 
   },
+  [
+    { b1: 1 }
+  ],
+  () => {}
 ]
 
 describe('func: object', () => {
