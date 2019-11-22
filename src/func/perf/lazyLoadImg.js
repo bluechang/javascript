@@ -2,7 +2,7 @@
  * lazy load images
  * 
  * html:
- *  <img src="placeholder.gif" data-src="real-url.jpg" />
+ *  <img src="placeholder.gif" data-src="real-url.jpg" class="lazy-img" />
  * 
  * js:
  * new LazyLoadImg({
