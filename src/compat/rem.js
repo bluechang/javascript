@@ -8,8 +8,8 @@
  *  通过将基数设置成 100，可以方便的计算出 css 的大小
  *
  * @param {number?} width 	设计图宽
- * @param {number?} height 	设计图宽
- * @param {number?} max 		最大宽 (达到时不再缩放)
+ * @param {number?} height 	设计图高
+ * @param {number?} max     最大宽 (达到时不再缩放)
  * 
  */
 
