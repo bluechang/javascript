@@ -31,19 +31,19 @@ export function debounce(fn, wait = 50, immediate = false) {
 }
 
 // 简版
-export function debounce(fn, wait = 50) {
-  let timer = null
+// export function debounce(fn, wait = 50) {
+//   let timer = null
   
-  return function() {
-    const context = this
+//   return function() {
+//     const context = this
     
-    if (timer) {
-      clearTimeout(timer)
-    }
+//     if (timer) {
+//       clearTimeout(timer)
+//     }
     
-    timer = serTimeout(() => {
-      fn.apply(context, arguments)
-      timer = null
-    }, wait)
-  }
-}
+//     timer = serTimeout(() => {
+//       fn.apply(context, arguments)
+//       timer = null
+//     }, wait)
+//   }
+// }
