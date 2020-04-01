@@ -1,5 +1,6 @@
 /**
  * debounce
+ * 场景：如百度/谷歌的搜索提示
  * 
  * @param {function} fn 实际执行的函数
  * @param {number} wait 延迟执行的时间
@@ -23,6 +24,7 @@ export function debounce(fn, wait = 50, immediate = false) {
     } else {
       timer = setTimeout(() => {
         fn.apply(context, args)
+        timer = null
       }, wait)
     }
   }
