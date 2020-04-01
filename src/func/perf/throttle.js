@@ -2,6 +2,8 @@
  * throttle
  * 时间戳会比定时器更准确
  * 
+ * 场景：如验证码
+ * 
  * @param {function} fn   实际执行的函数
  * @param {number} wait   延迟执行的时间
  * 
