@@ -3,8 +3,8 @@
  * 
  * 场景：如验证码、拖拽
  * 
- * @param {function} fn   实际执行的函数
- * @param {number} wait   延迟执行的时间
+ * @param {function} fn    实际执行的函数
+ * @param {number}   wait  延迟执行的时间
  * 
  */
 
@@ -23,18 +23,19 @@ export function throttle(fn, wait = 50) {
   }
 }
 
-// 定时器版
-// export function throttle(fn, wait = 50) {
-//   let timer = null
+/** 定时器版
+export function throttle(fn, wait = 50) {
+  let timer = null
   
-//   return function() {
-//     const context = this
+  return function() {
+    const context = this
     
-//     if (timer) return
+    if (timer) return
   
-//     timer = setTimeout(() => {
-//       fn.apply(context, arguments)
-//       timer = null
-//     }, wait)
-//   }
-// }
+    timer = setTimeout(() => {
+      fn.apply(context, arguments)
+      timer = null
+    }, wait)
+  }
+}
+*/
