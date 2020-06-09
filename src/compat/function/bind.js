@@ -1,21 +1,21 @@
 /**
- * bind polyfill
+ * function.prototype.bind polyfill
  */
 
-if (!Function.prototype.bind) {
-  (function(){
-    var slice = Array.prototype.slice
+;(function(){
+  if (Function.prototype.bind) return
 
-    Function.prototype.bind = function () {
-      var preArgs = slice.call(arguments)
-      var bindThis = preArgs.shift()
-      var fn = this
+  var slice = Array.prototype.slice
 
-      return function() {
-        var appendArgs = slice.call(arguments)
-        var args = preArgs.concat(appendArgs)
-        return fn.apply(bindThis, args)
-      }
+  Function.prototype.bind = function() {
+    var preArgs = slice.call(arguments)
+    var bindThis = preArgs.shift()
+    var fn = this
+
+    return function() {
+      var appendArgs = slice.call(arguments)
+      var args = preArgs.concat(appendArgs)
+      return fn.apply(bindThis, args)
     }
-  })()
-}
+  }
+})();
