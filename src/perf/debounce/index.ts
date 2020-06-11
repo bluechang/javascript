@@ -1,17 +1,21 @@
 /**
  * debounce
- * 场景：如百度/谷歌的搜索提示
+ * 场景：如百度/谷歌 的搜索提示
  * 
- * @param {function} fn               实际执行的函数
- * @param {object}  options
- * @param {number}  options.wait      延迟执行的时间
- * @param {boolean} options.immediate 是否立即执行
  */
-export function debounce(fn, options) {
-  let timer
-  options = Object.assign({}, options, debounce.options)
+interface Options {
+  wait: number,
+  immediate: boolean
+}
 
-  return function(...args) {
+export function debounce(
+  fn: Function, 
+  options?: Options
+) {
+  let timer = null
+  options = Object.assign({}, options || {}, debounce.options)
+
+  return function(...args: any[]) {
     const context = this
     const { wait, immediate } = options
 
@@ -39,8 +43,11 @@ debounce.options = {
   immediate: false
 }
 
-/**  简版
-export function debounce(fn, wait = 50) {
+/** a simple version
+export function debounce(
+  fn: () => void, 
+  wait: number = 50
+) {
   let timer = null
   
   return function() {
