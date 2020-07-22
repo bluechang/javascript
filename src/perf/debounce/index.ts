@@ -13,7 +13,7 @@ export function debounce(
   options?: Options
 ) {
   let timer = null
-  options = Object.assign({}, options || {}, debounce.options)
+  options = Object.assign({}, debounce.options, options || {})
 
   return function(...args: any[]) {
     const context = this
