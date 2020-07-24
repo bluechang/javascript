@@ -17,16 +17,12 @@ export default function copyToClipboard (text) {
     document.body.appendChild(el)
     el.select()
 
-    try {
-      const isSupported = document.execCommand('copy')
-      if (!isSupported) {
-        return alert('该浏览器不支持复制到剪贴板')
-      }
-      resolve()
-    } catch (e) {
-      reject(e)
+    const isSupported = document.execCommand('copy')
+    if (!isSupported) {
+      reject(new Error('该浏览器不支持复制到剪贴板'))
     }
 
     document.body.removeChild(el)
+    resolve(text)
   })
 }
